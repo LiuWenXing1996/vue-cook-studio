@@ -6,7 +6,9 @@
                 <ComponentList></ComponentList>
             </section>
             <section class="center">
-                <div class="content" @drop="handleDrop" @dragover="handleDragOver"></div>
+                <div class="content" @drop="handleDrop" @dragover="handleDragOver">
+                    <Editor />
+                </div>
             </section>
             <section class="right"></section>
         </main>
@@ -15,10 +17,20 @@
 <script lang="ts" setup>
 import Toolbar from "../components/Toolbar.vue"
 import ComponentList from "../components/ComponentList.vue";
+import componentList from "../custom-components/list";
+import useComponentData from "../hooks/useComponentData";
+import Editor from "../components/Editor/Editor.vue";
+
+console.log(Editor)
+const componentData = useComponentData();
 
 const handleDrop = (e: DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
+    const index = e.dataTransfer?.getData('index')
+    if (!index) { return }
+    const component = componentList[parseInt(index)]
+    componentData.value.push(component);
 }
 
 const handleDragOver = (e: DragEvent) => {

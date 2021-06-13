@@ -3,7 +3,6 @@ import App from './App.vue'
 import ElementPlus from 'element-plus'
 import 'element-plus/lib/theme-chalk/index.css'
 import router from './router'
-// import "normalize.css"
 import "./styles/global.less"
 
 const app = createApp(App)

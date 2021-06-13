@@ -1,3 +1,7 @@
+import { shallowRef } from '@vue/runtime-dom';
+import { ComponentConfig } from './../types/ComponentConfig.d';
+import VText from './VText.vue';
+import Te from "../packages/vant-ui/button/Component.vue"
 // 公共样式
 export const commonStyle = {
     rotate: 0,
@@ -12,12 +16,14 @@ export const commonAttr = {
 }
 
 // 编辑器左侧组件列表
-const list = [
+const list: ComponentConfig[] = [
     {
-        component: 'v-text',
+        ...commonAttr,
+        component: shallowRef(Te),
         label: '文字',
         propValue: '双击编辑文字',
         icon: 'wenben',
+        preview: "ddd",
         style: {
             width: 200,
             height: 22,
@@ -27,66 +33,16 @@ const list = [
             letterSpacing: 0,
             textAlign: '',
             color: '',
+            ...commonStyle,
         },
     },
-    {
-        component: 'v-button',
-        label: '按钮',
-        propValue: '按钮',
-        icon: 'button',
-        style: {
-            width: 100,
-            height: 34,
-            borderWidth: 1,
-            borderColor: '',
-            borderRadius: '',
-            fontSize: 14,
-            fontWeight: 500,
-            lineHeight: '',
-            letterSpacing: 0,
-            textAlign: '',
-            color: '',
-            backgroundColor: '',
-        },
-    },
-    {
-        component: 'Picture',
-        label: '图片',
-        icon: 'tupian',
-        // propValue: require('@/assets/title.jpg'),
-        style: {
-            width: 300,
-            height: 200,
-            borderRadius: '',
-        },
-    },
-    {
-        component: 'rect-shape',
-        label: '矩形',
-        propValue: '&nbsp;',
-        icon: 'juxing',
-        style: {
-            width: 200,
-            height: 200,
-            fontSize: 14,
-            fontWeight: 500,
-            lineHeight: '',
-            letterSpacing: 0,
-            textAlign: 'center',
-            color: '',
-            borderColor: '#000',
-            borderWidth: 1,
-            backgroundColor: '',
-            borderStyle: 'solid',
-            verticalAlign: 'middle',
-        },
-    },
+
 ]
 
-for (let i = 0, len = list.length; i < len; i++) {
-    const item = list[i]
-    item.style = { ...commonStyle, ...item.style }
-    list[i] = { ...commonAttr, ...item }
-}
+// for (let i = 0, len = list.length; i < len; i++) {
+//     const item = list[i]
+//     item.style = { ...commonStyle, ...item.style }
+//     list[i] = { ...commonAttr, ...item }
+// }
 
 export default list
