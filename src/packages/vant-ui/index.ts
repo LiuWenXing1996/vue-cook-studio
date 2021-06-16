@@ -1,9 +1,9 @@
-const modules = import.meta.globEager('./*/index.ts')
+import { ComponentConfigMaker } from './../../types/core.d';
+import ButtonComponentConfigMaker from "./button/index"
 
-const components = []
 
-Object.keys(modules).forEach((key: string) => {
-  const name = key.replace(/\.\/(.*)\/index\.ts/, '$1')
-//   const 
-  components[name] = modules[key]?.default || modules[key]
-})    
+const vantUiMakerList: ComponentConfigMaker[] = [];
+
+vantUiMakerList.push(ButtonComponentConfigMaker)
+
+export default vantUiMakerList

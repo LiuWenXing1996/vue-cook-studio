@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "element-plus": "^1.0.2-beta.46",
+    "lodash": "^4.17.21",
     "vant": "^3.0.18",
     "vue": "^3.0.5",
     "vue-router": "^4.0.8"

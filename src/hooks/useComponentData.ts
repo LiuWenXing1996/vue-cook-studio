@@ -1,4 +1,4 @@
-import { ComponentConfig } from './../types/ComponentConfig.d';
+import { ComponentConfig } from './../types/core';
 import { ref } from "vue";
 
 const componentData = ref<ComponentConfig[]>([]);

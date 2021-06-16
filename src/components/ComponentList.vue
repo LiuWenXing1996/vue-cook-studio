@@ -1,19 +1,20 @@
 <template>
     <div class="component-list" @dragstart="handleDragStart">
         <div
-            v-for="(item, index) in componentList"
+            v-for="(item, index) in componentMakerList"
             :key="index"
             class="list"
             draggable="true"
             :data-index="index"
+            :data-label="item.label"
         >
-            <span class="iconfont" :class="'icon-' + item.icon"></span>
-            <span>{{ item.label }}</span>
+            <component :is="item.preview"></component>
         </div>
     </div>
 </template>
 <script lang="ts" setup>
-import componentList from '../custom-components/list'
+import useComponentMakerList from "../hooks/useComponentMakerList";
+const componentMakerList = useComponentMakerList();
 const handleDragStart = (e: DragEvent) => {
     if (!(e.target instanceof HTMLDivElement)) {
         return;
@@ -22,10 +23,6 @@ const handleDragStart = (e: DragEvent) => {
         return;
     }
     e?.dataTransfer?.setData('index', e?.target?.dataset?.index)
-}
-
-const s = () => {
-    debugger;
 }
 </script>
 <style lang="less" scoped>
@@ -36,29 +33,43 @@ const s = () => {
     padding: 10px;
 
     .list {
-        width: 45%;
-        border: 1px solid #ddd;
-        cursor: grab;
-        margin-bottom: 10px;
-        text-align: center;
-        color: #333;
-        padding: 2px 5px;
+        position: relative;
+        width: calc(100% - 20px);
+        margin-left: 10px;
+        border: solid 3px #ebeef5;
+        margin-top: 20px;
+        min-height: 120px;
         display: flex;
         align-items: center;
         justify-content: center;
-
-        &:active {
-            cursor: grabbing;
+        padding: 0px 5px;
+        box-sizing: border-box;
+        &:hover {
+            border-color: #409eff;
+            cursor: move;
         }
-
-        .iconfont {
-            margin-right: 4px;
-            font-size: 20px;
+        &:last-of-type {
+            margin-bottom: 20px;
         }
-
-        .icon-wenben,
-        .icon-tupian {
-            font-size: 18px;
+        &::before {
+            content: attr(data-label);
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            background-color: #409eff;
+            color: white;
+            padding: 4px 8px;
+            font-size: 12px;
+            z-index: 1;
+        }
+        &::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 2;
         }
     }
 }

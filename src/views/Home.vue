@@ -10,27 +10,57 @@
                     <Editor />
                 </div>
             </section>
-            <section class="right"></section>
+            <section class="right">
+                <el-tabs v-model="activeName">
+                    <el-tab-pane label="属性" name="attr">
+                        <!-- <AttrList v-if="curComponent" /> -->
+                        <p class="placeholder">请选择组件</p>
+                    </el-tab-pane>
+                    <el-tab-pane label="动画" name="animation">
+                        <!-- <AnimationList v-if="curComponent" /> -->
+                        <p class="placeholder">请选择组件</p>
+                    </el-tab-pane>
+                    <el-tab-pane label="事件" name="events">
+                        <!-- <EventList v-if="curComponent" /> -->
+                        <p class="placeholder">请选择组件</p>
+                    </el-tab-pane>
+                </el-tabs>
+            </section>
         </main>
     </div>
 </template>
 <script lang="ts" setup>
 import Toolbar from "../components/Toolbar.vue"
 import ComponentList from "../components/ComponentList.vue";
-import componentList from "../custom-components/list";
 import useComponentData from "../hooks/useComponentData";
 import Editor from "../components/Editor/Editor.vue";
+import { ref } from "vue";
+import useComponentMakerList from "../hooks/useComponentMakerList";
+import type { ComponentConfig } from "../types/core";
 
-console.log(Editor)
 const componentData = useComponentData();
+const componentMakerList = useComponentMakerList();
+const activeName = ref('attr')
 
 const handleDrop = (e: DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
     const index = e.dataTransfer?.getData('index')
     if (!index) { return }
-    const component = componentList[parseInt(index)]
-    componentData.value.push(component);
+    const componentMaker = componentMakerList.value[parseInt(index)]
+    let componentConfig = {
+        props: Object.keys(componentMaker.propOptions || {}).reduce((prev, curr) => {
+            if (componentMaker.propOptions![curr]?.defaultValue) {
+                prev[curr] = componentMaker.propOptions![curr]?.defaultValue
+            }
+            return prev
+        }, {} as Record<string, any>),
+        component: componentMaker.component,
+        maker: componentMaker
+    } as ComponentConfig;
+    // TODO:属性设置默认值
+    // TODO:先不考虑这种结构“fsfs.fsfs.fsfs”
+    componentData.value.push(componentConfig);
 }
 
 const handleDragOver = (e: DragEvent) => {
@@ -62,6 +92,10 @@ const handleDragOver = (e: DragEvent) => {
             width: 262px;
             right: 0;
             top: 0;
+            .placeholder {
+                text-align: center;
+                color: #333;
+            }
         }
         .center {
             margin-left: 200px;
