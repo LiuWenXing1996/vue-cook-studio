@@ -9,18 +9,27 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { defineProps, ref } from "vue";
+import { computed, defineProps, ref, toRefs } from "vue";
+import useComponentSelected from "../../hooks/useComponentSelected";
 import type { ComponentConfig } from "../../types/core"
-const { isEdit } = defineProps<{ config: ComponentConfig, isEdit: boolean }>()
+const props = defineProps<{ config: ComponentConfig, isEdit: boolean }>()
 
-const selected = ref(false)
+const { isEdit, config } = toRefs(props);
+
+const selected = computed(() => componentSelected.value === config.value)
+const componentSelected = useComponentSelected()
+
 
 const handleClick = (event: MouseEvent) => {
     if (!isEdit) {
         return
     }
-    event.stopPropagation();
-    selected.value = !selected.value;
+    event.stopPropagation()
+    if (selected.value) {
+        componentSelected.value = undefined
+    } else {
+        componentSelected.value = config.value
+    }
 }
 
 </script>

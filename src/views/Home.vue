@@ -13,8 +13,8 @@
             <section class="right">
                 <el-tabs v-model="activeName">
                     <el-tab-pane label="属性" name="attr">
-                        <!-- <AttrList v-if="curComponent" /> -->
-                        <p class="placeholder">请选择组件</p>
+                        <AttrList v-if="componentSelected" />
+                        <p class="placeholder" v-else>请选择组件</p>
                     </el-tab-pane>
                     <el-tab-pane label="动画" name="animation">
                         <!-- <AnimationList v-if="curComponent" /> -->
@@ -33,14 +33,17 @@
 import Toolbar from "../components/Toolbar.vue"
 import ComponentList from "../components/ComponentList.vue";
 import useComponentData from "../hooks/useComponentData";
+import AttrList from "../components/AttrList.vue";
 import Editor from "../components/Editor/Editor.vue";
 import { ref } from "vue";
 import useComponentMakerList from "../hooks/useComponentMakerList";
 import type { ComponentConfig } from "../types/core";
+import useComponentSelected from "../hooks/useComponentSelected";
 
 const componentData = useComponentData();
 const componentMakerList = useComponentMakerList();
 const activeName = ref('attr')
+const componentSelected =useComponentSelected()
 
 const handleDrop = (e: DragEvent) => {
     e.preventDefault()
@@ -50,8 +53,8 @@ const handleDrop = (e: DragEvent) => {
     const componentMaker = componentMakerList.value[parseInt(index)]
     let componentConfig = {
         props: Object.keys(componentMaker.propOptions || {}).reduce((prev, curr) => {
-            if (componentMaker.propOptions![curr]?.defaultValue) {
-                prev[curr] = componentMaker.propOptions![curr]?.defaultValue
+            if (componentMaker.propOptions![curr].default) {
+                prev[curr] = componentMaker.propOptions![curr].default
             }
             return prev
         }, {} as Record<string, any>),
