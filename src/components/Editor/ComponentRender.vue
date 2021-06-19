@@ -5,11 +5,12 @@
         @click="handleClick"
         draggable="true"
     >
-        <component :is="config.component" v-bind="config.props"></component>
+        <component :is="config.maker.component" v-bind="componentProps"></component>
     </div>
 </template>
 <script lang="ts" setup>
 import { computed, defineProps, ref, toRefs } from "vue";
+import useComponentPropEditedList from "../../hooks/useComponentPropEditedList";
 import useComponentSelected from "../../hooks/useComponentSelected";
 import type { ComponentConfig } from "../../types/core"
 const props = defineProps<{ config: ComponentConfig, isEdit: boolean }>()
@@ -19,6 +20,7 @@ const { isEdit, config } = toRefs(props);
 const selected = computed(() => componentSelected.value === config.value)
 const componentSelected = useComponentSelected()
 
+const componentProps = computed(() => useComponentPropEditedList(config.value))
 
 const handleClick = (event: MouseEvent) => {
     if (!isEdit) {

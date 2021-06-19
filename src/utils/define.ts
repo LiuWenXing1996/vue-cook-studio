@@ -1,6 +1,6 @@
-import { ComponentConfigMaker, ComponentPropOptionSelect, ComponentPropOptionInput } from './../types/core.d';
+import { ComponentMaker, ComponentPropOptionSelect, ComponentPropOptionInput } from './../types/core.d';
 
-export function defineComponentConfigMaker(maker: ComponentConfigMaker) {
+export function defineComponentConfigMaker(maker: ComponentMaker) {
     return maker;
 }
 

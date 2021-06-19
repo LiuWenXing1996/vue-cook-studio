@@ -8,16 +8,18 @@ export default defineComponentConfigMaker({
     label: '按钮',
     component: markRaw(Component),
     preview: markRaw(Preview),
-    propOptions: {
-        text: defineComponentPropOptionInput({
+    propOptions: [
+        defineComponentPropOptionInput({
+            key: "text",
             type: ComponentPropOptionType.input,
             label: "文字",
             default: '默认fff'
         }),
-        type: defineComponentPropOptionSelect({
+        defineComponentPropOptionSelect({
+            key: "type",
             type: ComponentPropOptionType.select,
             label: "类型",
-            options: [
+            selectOptions: [
                 {
                     label: "默认按钮",
                     value: 'default',
@@ -44,7 +46,7 @@ export default defineComponentConfigMaker({
                     realValue: "danger"
                 }
             ],
-            default: 'danger'
+            default: 'default'
         })
-    }
+    ]
 })

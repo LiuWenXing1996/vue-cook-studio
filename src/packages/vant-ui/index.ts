@@ -1,8 +1,8 @@
-import { ComponentConfigMaker } from './../../types/core.d';
+import { ComponentMaker } from './../../types/core.d';
 import ButtonComponentConfigMaker from "./button/index"
 
 
-const vantUiMakerList: ComponentConfigMaker[] = [];
+const vantUiMakerList: ComponentMaker[] = [];
 
 vantUiMakerList.push(ButtonComponentConfigMaker)
 

@@ -33,17 +33,18 @@
 import Toolbar from "../components/Toolbar.vue"
 import ComponentList from "../components/ComponentList.vue";
 import useComponentData from "../hooks/useComponentData";
-import AttrList from "../components/AttrList.vue";
+import AttrList from "../components/AttrList/AttrList.vue";
 import Editor from "../components/Editor/Editor.vue";
 import { ref } from "vue";
 import useComponentMakerList from "../hooks/useComponentMakerList";
 import type { ComponentConfig } from "../types/core";
 import useComponentSelected from "../hooks/useComponentSelected";
+import useComponentMakerDefault from "../hooks/useComponentMakerDefault";
 
 const componentData = useComponentData();
 const componentMakerList = useComponentMakerList();
 const activeName = ref('attr')
-const componentSelected =useComponentSelected()
+const componentSelected = useComponentSelected()
 
 const handleDrop = (e: DragEvent) => {
     e.preventDefault()
@@ -51,16 +52,7 @@ const handleDrop = (e: DragEvent) => {
     const index = e.dataTransfer?.getData('index')
     if (!index) { return }
     const componentMaker = componentMakerList.value[parseInt(index)]
-    let componentConfig = {
-        props: Object.keys(componentMaker.propOptions || {}).reduce((prev, curr) => {
-            if (componentMaker.propOptions![curr].default) {
-                prev[curr] = componentMaker.propOptions![curr].default
-            }
-            return prev
-        }, {} as Record<string, any>),
-        component: componentMaker.component,
-        maker: componentMaker
-    } as ComponentConfig;
+    let componentConfig = useComponentMakerDefault(componentMaker)
     // TODO:属性设置默认值
     // TODO:先不考虑这种结构“fsfs.fsfs.fsfs”
     componentData.value.push(componentConfig);

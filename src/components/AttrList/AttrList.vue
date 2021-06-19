@@ -9,7 +9,7 @@
                 <component
                     :is="propOptionComponentsMap[item.type]"
                     :componentSelected="componentSelected"
-                    :propKey="index"
+                    :propKey="item.key"
                 ></component>
             </el-form-item>
         </el-form>
@@ -18,13 +18,14 @@
 <script lang="ts" setup>
 import useComponentSelected from "../../hooks/useComponentSelected";
 import AttrOptionInput from "./AttrOptionInput.vue";
-import { ComponentPropOptionType } from "../../types/core"
+import AttrOptionSelect from "./AttrOptionSelect.vue";
+import { ComponentPropOptionType } from "../../types/core.d"
 
 const propOptionComponentsMap = {
     [ComponentPropOptionType.input]: AttrOptionInput,
     [ComponentPropOptionType.inputNumber]: AttrOptionInput,
     [ComponentPropOptionType.color]: AttrOptionInput,
-    [ComponentPropOptionType.select]: AttrOptionInput,
+    [ComponentPropOptionType.select]: AttrOptionSelect,
     [ComponentPropOptionType.switch]: AttrOptionInput,
     [ComponentPropOptionType.table]: AttrOptionInput,
 }
