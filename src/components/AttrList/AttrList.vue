@@ -23,13 +23,11 @@ import { ComponentPropOptionType } from "../../types/core.d"
 
 const propOptionComponentsMap = {
     [ComponentPropOptionType.input]: AttrOptionInput,
-    [ComponentPropOptionType.inputNumber]: AttrOptionInput,
-    [ComponentPropOptionType.color]: AttrOptionInput,
     [ComponentPropOptionType.select]: AttrOptionSelect,
-    [ComponentPropOptionType.switch]: AttrOptionInput,
-    [ComponentPropOptionType.table]: AttrOptionInput,
+    [ComponentPropOptionType.slot]:AttrOptionSelect
 }
 // TODO:实现其他的属性选项输入框。。
+// TODO:在组建修改后，再次选中的时候，属性要保持修改后的，layout
 
 const componentSelected = useComponentSelected()
 </script>

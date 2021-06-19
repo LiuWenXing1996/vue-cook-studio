@@ -1,22 +1,13 @@
 import { ComponentConfig, ComponentPropOption, ComponentPropOptionInput, ComponentPropOptionType, ComponentPropOptionEdited, ComponentPropOptionSelect } from './../types/core.d';
 
 const realValueFinderMap: { [key in ComponentPropOptionType]: (propOption: ComponentPropOption, propOptionEdited: ComponentPropOptionEdited) => any } = {
-    [ComponentPropOptionType.switch]: (propOption: ComponentPropOption, propOptionEdited: ComponentPropOptionEdited) => {
-        return propOptionEdited.value
-    },
     [ComponentPropOptionType.input]: (propOption: ComponentPropOption, propOptionEdited: ComponentPropOptionEdited) => {
         return propOptionEdited.value
     },
     [ComponentPropOptionType.select]: (propOption: ComponentPropOption, propOptionEdited: ComponentPropOptionEdited) => {
         return propOptionEdited.value
     },
-    [ComponentPropOptionType.inputNumber]: (propOption: ComponentPropOption, propOptionEdited: ComponentPropOptionEdited) => {
-        return propOptionEdited.value
-    },
-    [ComponentPropOptionType.color]: (propOption: ComponentPropOption, propOptionEdited: ComponentPropOptionEdited) => {
-        return propOptionEdited.value
-    },
-    [ComponentPropOptionType.table]: (propOption: ComponentPropOption, propOptionEdited: ComponentPropOptionEdited) => {
+    [ComponentPropOptionType.slot]: (propOption: ComponentPropOption, propOptionEdited: ComponentPropOptionEdited) => {
         return propOptionEdited.value
     }
 }

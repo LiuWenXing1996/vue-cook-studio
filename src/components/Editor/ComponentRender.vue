@@ -1,15 +1,23 @@
 <template>
     <div
         class="component-wrapper"
-        :class="{ selected: selected, isEdit: isEdit }"
+        :class="{ selected: selected, hovered: hovered, isEdit: isEdit }"
         @click="handleClick"
+        @mouseover="handleHover"
         draggable="true"
     >
-        <component :is="config.maker.component" v-bind="componentProps"></component>
+        <component :is="config.maker.component" v-bind="componentProps">
+            <template v-for="(item,index) in componentProps?.slots" v-slot:[item.name]>
+                <ComponentRender :config="item.config" :is-edit="isEdit"></ComponentRender>
+            </template>
+        </component>
     </div>
 </template>
 <script lang="ts" setup>
-import { computed, defineProps, ref, toRefs } from "vue";
+import { computed, defineProps, ref, toRefs, useContext } from "vue";
+import useComponentHovered from "../../hooks/useComponentHovered";
+import useComponentMakerDefault from "../../hooks/useComponentMakerDefault";
+import useComponentMakerList from "../../hooks/useComponentMakerList";
 import useComponentPropEditedList from "../../hooks/useComponentPropEditedList";
 import useComponentSelected from "../../hooks/useComponentSelected";
 import type { ComponentConfig } from "../../types/core"
@@ -18,7 +26,9 @@ const props = defineProps<{ config: ComponentConfig, isEdit: boolean }>()
 const { isEdit, config } = toRefs(props);
 
 const selected = computed(() => componentSelected.value === config.value)
+const hovered = computed(() => componentHovered.value === config.value)
 const componentSelected = useComponentSelected()
+const componentHovered = useComponentHovered()
 
 const componentProps = computed(() => useComponentPropEditedList(config.value))
 
@@ -32,6 +42,14 @@ const handleClick = (event: MouseEvent) => {
     } else {
         componentSelected.value = config.value
     }
+}
+
+const handleHover = (event: MouseEvent) => {
+    if (!isEdit) {
+        return
+    }
+    event.stopPropagation()
+    componentHovered.value = config.value
 }
 
 </script>
@@ -55,7 +73,7 @@ const handleClick = (event: MouseEvent) => {
         }
 
         &.selected,
-        &:hover {
+        &.hovered {
             &::before {
                 cursor: move;
                 border: solid 3px #409eff;

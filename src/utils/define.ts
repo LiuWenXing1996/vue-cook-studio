@@ -1,4 +1,4 @@
-import { ComponentMaker, ComponentPropOptionSelect, ComponentPropOptionInput } from './../types/core.d';
+import { ComponentMaker, ComponentPropOptionSelect, ComponentPropOptionInput, componentPropOptionSlot } from './../types/core.d';
 
 export function defineComponentConfigMaker(maker: ComponentMaker) {
     return maker;
@@ -9,3 +9,5 @@ export function defineComponentPropOptionSelect(propOption: ComponentPropOptionS
 }
 
 export const defineComponentPropOptionInput = (propOption: ComponentPropOptionInput) => propOption
+
+export const defineComponentPropOptionSlot = (propOption: componentPropOptionSlot) => propOption
