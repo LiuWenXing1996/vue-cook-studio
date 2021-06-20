@@ -5,7 +5,11 @@
         @click="handleClick"
         @mouseover="handleMouseover"
         @mouseleave="handleMouseleave"
+        @drop="handleDrop"
+        @dragover="handleDragOver"
+        @dragstart="handleDragStart"
         draggable="true"
+        :data-uid="config.uid"
     >
         {{ isSlot }}
         <component :is="config.maker.component" v-bind="componentProps">
@@ -18,10 +22,16 @@
 <script lang="ts" setup>
 import { computed, defineProps, ref, toRefs, useContext } from "vue";
 import type { PropType } from "vue"
-import useComponentHovered from "../../hooks/useComponentHovered";
-import useComponentPropEditedList from "../../hooks/useComponentPropEditedList";
-import useComponentSelected from "../../hooks/useComponentSelected";
-import type { ComponentConfig } from "../../types/core"
+import useComponentHovered from "../hooks/useComponentHovered";
+import useComponentPropEditedList from "../hooks/useComponentPropEditedList";
+import useComponentSelected from "../hooks/useComponentSelected";
+import type { ComponentConfig } from "../types/core"
+import useComponentDragged from "../hooks/useComponentDragged";
+import useComponentData from "../hooks/useComponentData";
+import useComponentMakerList from "../hooks/useComponentMakerList";
+import useComponentMakerDefault from "../hooks/useComponentMakerDefault";
+
+
 const props = defineProps(
     {
         config: {
@@ -48,6 +58,7 @@ const selected = computed(() => componentSelected.value === config.value)
 const hovered = computed(() => componentHovered.value === config.value)
 const componentSelected = useComponentSelected()
 const componentHovered = useComponentHovered()
+const componentDragged = useComponentDragged()
 
 const componentProps = computed(() => useComponentPropEditedList(config.value))
 
@@ -81,6 +92,65 @@ const handleMouseleave = (event: MouseEvent) => {
     }
 }
 
+const handleDragStart = (e: DragEvent) => {
+    if (!(e.target instanceof HTMLElement)) {
+        return;
+    }
+    if (!e?.target?.dataset?.uid) {
+        return;
+    }
+    componentDragged.value = config.value
+    e?.dataTransfer?.setData('uid', e?.target?.dataset?.uid)
+}
+
+const handleDragOver = (e: DragEvent) => {
+    e.preventDefault()
+    if (e?.dataTransfer?.dropEffect) {
+        if (componentDragged.value) {
+            e.dataTransfer.dropEffect = 'move'
+        } else {
+            e.dataTransfer.dropEffect = 'copy'
+        }
+    }
+}
+
+const handleDrop = (e: DragEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (componentDragged.value) {
+        const uid = e.dataTransfer?.getData('index')
+        if (!uid) { return }
+        let targetConfig;
+        // 递归查找
+        const componentData = useComponentData().value;
+        function find(config: ComponentConfig) {
+            if (config.uid === uid) {
+                targetConfig = config
+                return
+            } else {
+                const componentProps = computed(() => useComponentPropEditedList(config))
+                if (componentProps.value?.slots) {
+                    let slots = componentProps.value?.slots as any[]
+                    slots.forEach(e => {
+                        find(e.config)
+                    })
+                }
+            }
+        }
+        componentData.forEach(e => find(e))
+        if(targetConfig){
+            // TODO:需要更改它的父节点
+        }
+    } else {
+        const index = e.dataTransfer?.getData('index')
+        if (!index) { return }
+        const componentMaker = useComponentMakerList().value[parseInt(index)]
+        let componentConfig = useComponentMakerDefault(componentMaker)
+        // TODO:属性设置默认值
+        // TODO:先不考虑这种结构“fsfs.fsfs.fsfs”
+        useComponentData().value.push(componentConfig);
+    }
+}
 </script>
 <style lang="less" scoped>
 .component-wrapper {

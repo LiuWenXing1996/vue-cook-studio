@@ -16,8 +16,15 @@ export interface ComponentPropOption {
 
 export interface ComponentPropOptionEdited {
     key: string,
-    value: string,
+    value: any,
 }
+
+export interface ComponentPropOptionSlotEdited {
+    key: string,
+    value: any[]
+}
+
+
 
 export interface ComponentPropOptionInput extends ComponentPropOption {
     type: ComponentPropOptionType.input,
@@ -36,8 +43,8 @@ export interface ComponentPropOptionSelect extends ComponentPropOption {
 
 export interface componentPropOptionSlot extends ComponentPropOption {
     type: ComponentPropOptionType.slot,
-    slotOptions:{
-        name:string
+    slotOptions: {
+        name: string
     }[]
     default: any[]
 }
