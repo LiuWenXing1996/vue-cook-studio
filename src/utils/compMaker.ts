@@ -1,5 +1,5 @@
 import { Component } from "vue";
-import { ComponentWrapperAttrOptions } from "../components/componentWrapper/componentWrapper";
+import { ComponentWrapperAttrOptions } from "../components/ComponentWrapper/componentWrapper";
 
 export interface CompMaker {
     name: string,

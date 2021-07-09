@@ -8,15 +8,15 @@
             :data-index="index"
             :data-label="maker.label"
         >
-            <component-wrapper :config="useComponentConfigDefault(maker)"></component-wrapper>
-            <!-- <component :is="item.preview"></component> -->
+            <component-wrapper :config="getComponentConfigDefault(maker)"></component-wrapper>
         </div>
     </div>
 </template>
 <script lang="ts" setup>
-import useComponentMakerList from "../hooks/useComponentMakerList";
-import ComponentWrapper from "./ComponentWrapper.vue";
-import useComponentConfigDefault from "../hooks/useComponentConfigDefault";
+import { useComponentMakerList } from "./hooks";
+import ComponentWrapper from "../ComponentWrapper/ComponentWrapper.vue";
+import { getComponentConfigDefault } from "./utils";
+
 const componentMakerList = useComponentMakerList().data;
 const handleDragStart = (e: DragEvent) => {
     if (!(e.target instanceof HTMLDivElement)) {

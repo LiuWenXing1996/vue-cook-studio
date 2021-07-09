@@ -3,7 +3,6 @@ import { JsonType } from "../../utils/jsonType"
 
 export enum EditorType {
     input = 'input',
-    select = 'select'
 }
 
 export interface EditorConfigBase<T extends JsonType> {

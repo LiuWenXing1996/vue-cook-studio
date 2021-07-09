@@ -1,9 +1,9 @@
-import { ComponentMaker } from '../types/core';
+import { ComponentMaker } from './types';
 import { ref } from "vue";
 
 const componentMakerList = ref<ComponentMaker[]>([]);
 
-export default function useComponentMakerList() {
+export function useComponentMakerList() {
     return {
         data: componentMakerList,
         get: (name: string, version: string) => {

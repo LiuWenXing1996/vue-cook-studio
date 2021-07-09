@@ -1,4 +1,4 @@
-import { ComponentMaker } from './../../types/core.d';
+import { ComponentMaker } from '../../components/ComponentMakerList/types';
 import RootAppMaker from "./root-app/index"
 
 

@@ -27,18 +27,11 @@
 <script lang="ts" setup>
 import { computed, defineProps, ref, toRefs, watch } from "vue";
 import type { Ref } from "vue"
-import useComponentHovered from "../hooks/useComponentHovered";
-import useComponentPropEditedList from "../hooks/useComponentPropEditedList";
-import useComponentSelected from "../hooks/useComponentSelected";
-import type { ComponentConfig, ComponentMaker } from "../types/core"
-import useComponentDragged from "../hooks/useComponentDragged";
-import useComponentData from "../hooks/useComponentData";
-import useComponentMakerList from "../hooks/useComponentMakerList";
-import useComponentMaker from "../hooks/useComponentMaker";
-import useComponentPropObject from "../hooks/useComponentPropObject";
-import useComponentConfigDefault from "../hooks/useComponentConfigDefault";
-import useEditorConfigRealValue from "../hooks/useEditorConfigRealValue";
-import _ from 'lodash';
+import { useComponentHovered, useComponentSelected, useComponentDragged } from "./hooks";
+import type { ComponentConfig } from "./types";
+import { findMaker } from "../ComponentMakerList/utils";
+import { getComponentPropsObject } from "./utils";
+
 const props = defineProps(
     {
         config: {
@@ -57,31 +50,14 @@ const props = defineProps(
 )
 
 const { isEdit, config, isSlot } = toRefs(props)
-const maker = useComponentMaker(config.value)
-
+// @ts-ignore
+const maker = computed(() => findMaker(config.value))
 const selected = computed(() => componentSelected.value === config.value)
 const hovered = computed(() => componentHovered.value === config.value)
 const componentSelected = useComponentSelected()
 const componentHovered = useComponentHovered()
 const componentDragged = useComponentDragged()
-
-let componentProps: Ref<Record<string, any>> = ref({})
-
-watch(componentSelected, (newValue) => {
-    // debugger;
-    if (componentSelected.value?.uid === config.value.uid) {
-        const sss = useComponentPropObject(componentSelected.value) as Record<string, any>
-        componentProps.value = JSON.parse(JSON.stringify(sss));
-        // TODO:为什么更改componentProps没有成功,改成ref后就成功了？？？？？？？
-        console.log(JSON.stringify(componentProps))
-    }
-}, {
-    immediate: true,
-    deep: true
-})
-
-
-
+const componentProps = computed(() => getComponentPropsObject(config.value))
 
 const handleClick = (event: MouseEvent) => {
     if (!isEdit) {
@@ -138,17 +114,17 @@ const handleDragOver = (e: DragEvent) => {
 const handleDrop = (e: DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    if (componentDragged.value) {
-        
-    } else {
-        const index = e.dataTransfer?.getData('index')
-        if (!index) { return }
-        const componentMaker = useComponentMakerList().data.value[parseInt(index)]
-        let componentConfig = useComponentConfigDefault(componentMaker)
-        // TODO:属性设置默认值
-        // TODO:先不考虑这种结构“fsfs.fsfs.fsfs”
-        config.value.slots[0].value.push(componentConfig);
-    }
+    // if (componentDragged.value) {
+
+    // } else {
+    //     const index = e.dataTransfer?.getData('index')
+    //     if (!index) { return }
+    //     const componentMaker = useComponentMakerList().data.value[parseInt(index)]
+    //     let componentConfig = useComponentConfigDefault(componentMaker)
+    //     // TODO:属性设置默认值
+    //     // TODO:先不考虑这种结构“fsfs.fsfs.fsfs”
+    //     config.value.slots[0].value.push(componentConfig);
+    // }
 }
 </script>
 <style lang="less" scoped>

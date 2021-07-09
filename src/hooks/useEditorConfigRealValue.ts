@@ -1,16 +1,12 @@
-import { EditorConfig, EditorType } from './../types/core.d';
+import { EditorConfig, EditorType } from '../components/editors/editorConfig';
+import { JsonType } from '../utils/jsonType';
 
-const realValueFinderMap: { [key in EditorType]: (config: EditorConfig, visualValue: string) => any } = {
+const realValueFinderMap: { [key in EditorType]: (config: EditorConfig, visualValue: JsonType) => any } = {
     [EditorType.input]: (config, visualValue) => {
         return visualValue
-    },
-    [EditorType.select]: (config, visualValue) => {
-        const { selectOptions = [] } = config
-        const targetOption = selectOptions.find(option => option.value === visualValue)
-        return targetOption?.realValue
     }
 }
 
-export default function useEditorConfigRealValue(config: EditorConfig, visualValue: string) {
+export default function useEditorConfigRealValue(config: EditorConfig, visualValue: JsonType) {
     return realValueFinderMap[config.type](config, visualValue)
 }

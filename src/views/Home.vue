@@ -3,13 +3,13 @@
         <Toolbar></Toolbar>
         <main>
             <section class="left">
-                <ComponentList></ComponentList>
+                <ComponentMakerList></ComponentMakerList>
             </section>
             <section class="center">
                 <ComponentWrapper :config="rootAppConfig" :is-edit="true" />
             </section>
             <section class="right">
-                <AttrList v-if="componentSelected" />
+                <OptionsPanel v-if="componentSelected" />
                 <p class="placeholder" v-else>请选择组件</p>
             </section>
         </main>
@@ -17,23 +17,17 @@
 </template>
 <script lang="ts" setup>
 import Toolbar from "../components/Toolbar.vue"
-import ComponentList from "../components/ComponentList.vue";
-import useComponentData from "../hooks/useComponentData";
-import AttrList from "../components/AttrList/AttrList.vue";
-import ComponentWrapper from "../components/ComponentWrapper.vue";
-import { ref } from "vue";
-import useComponentMakerList from "../hooks/useComponentMakerList";
-import type { ComponentMaker } from "../types/core";
+import ComponentMakerList from "../components/ComponentMakerList/ComponentMakerList.vue";
+import OptionsPanel from "../components/OptionsPanel.vue";
+import ComponentWrapper from "../components/ComponentWrapper/ComponentWrapper.vue";
+import { useComponentMakerList } from "../components/ComponentMakerList/hooks";
+import type { ComponentMaker } from "../components/ComponentMakerList/types";
 import useComponentSelected from "../hooks/useComponentSelected";
-import useComponentConfigDefault from "../hooks/useComponentConfigDefault";
+import { getComponentConfigDefault } from "../components/ComponentMakerList/utils";
 
-const componentData = useComponentData();
-const componentMakerList = useComponentMakerList();
-const activeName = ref('attr')
 const componentSelected = useComponentSelected()
-
 const rootAppMaker = useComponentMakerList().get("core-ui-root-app", "0.0.1") as ComponentMaker
-const rootAppConfig = useComponentConfigDefault(rootAppMaker)
+const rootAppConfig = getComponentConfigDefault(rootAppMaker)
 
 </script>
 <style lang="less" scoped>
