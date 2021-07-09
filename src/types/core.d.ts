@@ -1,65 +1,88 @@
 import { Component } from "vue";
 
-export enum ComponentPropOptionType {
+export enum EditorType {
     input = 'input',
-    select = 'select',
-    slot = "slot"
+    select = 'select'
 }
 
-export interface ComponentPropOption {
-    key: string,
-    type: ComponentPropOptionType,
+export interface EditorConfig {
+    type: EditorType,
+    isFreeze: boolean,
     label: string,
-    tips?: string,
-    default: any
-}
-
-export interface ComponentPropOptionEdited {
-    key: string,
-    value: any,
-}
-
-export interface ComponentPropOptionSlotEdited {
-    key: string,
-    value: any[]
-}
-
-
-
-export interface ComponentPropOptionInput extends ComponentPropOption {
-    type: ComponentPropOptionType.input,
-    default: string
-}
-
-export interface ComponentPropOptionSelect extends ComponentPropOption {
-    type: ComponentPropOptionType.select,
     default: string,
-    selectOptions: {
+    selectOptions?: {
         label: string,
         value: string,
         realValue: any
     }[]
 }
 
-export interface componentPropOptionSlot extends ComponentPropOption {
-    type: ComponentPropOptionType.slot,
-    slotOptions: {
-        name: string
-    }[]
-    default: any[]
+export interface ComponentProp {
+    name: string,
+    value: string,
+}
+
+export interface ComponentPropOption {
+    name: string,
+    editorConfig: EditorConfig
+}
+
+export interface ComponentSlot {
+    name: string,
+    value: ComponentConfig[],
+}
+
+export interface ComponentSlotOption {
+    name: string,
+    editorConfig: EditorConfig
 }
 
 export interface ComponentConfig {
     uid: string,
-    propOptionEditedList: ComponentPropOptionEdited[],
-    maker: ComponentMaker
+    wrapperAttrs: ComponentWrapperAttrs,
+    props: ComponentProp[],
+    slots: ComponentSlot[],
+    makerName: string,
+    makerVersion: string
 }
 
+export enum ComponentWrapperPositionType {
+    absolute = "absolute",
+    relative = "relative"
+}
+
+export interface ComponentWrapperAttrs {
+    width: string | number,
+    height: string | number,
+    position: ComponentWrapperPositionType
+}
+
+export interface ComponentWrapperAttrOptions {
+    width: {
+        value: string | number,
+        editorConfig: EditorConfig
+    },
+    height: {
+        value: string | number,
+        editorConfig: EditorConfig
+    },
+    position: {
+        value: string | number,
+        editorConfig: EditorConfig
+    },
+}
 
 export interface ComponentMaker {
-    key: string,
-    label?: string,
-    component: string | Component,
-    preview: string | Component,
-    propOptions: ComponentPropOption[]
+    name: string,
+    version: string,
+    label: string,
+    component: Component,
+    wrapperOptions: ComponentWrapperAttrOptions
+    propOptions: ComponentPropOption[],
+    slotOptions: ComponentSlotOption[]
+}
+
+export interface ComponentBoxPropOptions {
+    width: ComponentProp,
+    height: ComponentProp,
 }

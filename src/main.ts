@@ -5,8 +5,10 @@ import 'element-plus/lib/theme-chalk/index.css'
 import router from './router'
 import "./styles/global.less"
 import vantUiMakerList from './packages/vant-ui'
+import coreUiMakerList from "./packages/core-ui"
 import useComponentMakerList from './hooks/useComponentMakerList'
-useComponentMakerList().value.push(...vantUiMakerList)
+useComponentMakerList().set(...coreUiMakerList)
+useComponentMakerList().set(...vantUiMakerList)
 const app = createApp(App)
 app.use(router)
 app.use(ElementPlus)

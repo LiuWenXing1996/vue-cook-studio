@@ -1,10 +1,10 @@
 import { ComponentMaker } from './../../types/core.d';
 import ButtonComponentMaker from "./button/index"
-import LayoutComponentMaker from "./layout"
+// import LayoutComponentMaker from "./layout"
 
 
 const vantUiMakerList: ComponentMaker[] = [];
 
-vantUiMakerList.push(ButtonComponentMaker, LayoutComponentMaker)
+vantUiMakerList.push(ButtonComponentMaker)
 
 export default vantUiMakerList

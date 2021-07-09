@@ -6,25 +6,11 @@
                 <ComponentList></ComponentList>
             </section>
             <section class="center">
-                <div class="content" @drop="handleDrop" @dragover="handleDragOver">
-                    <Editor />
-                </div>
+                <ComponentWrapper :config="rootAppConfig" :is-edit="true" />
             </section>
             <section class="right">
-                <el-tabs v-model="activeName">
-                    <el-tab-pane label="属性" name="attr">
-                        <AttrList v-if="componentSelected" />
-                        <p class="placeholder" v-else>请选择组件</p>
-                    </el-tab-pane>
-                    <el-tab-pane label="动画" name="animation">
-                        <!-- <AnimationList v-if="curComponent" /> -->
-                        <p class="placeholder">请选择组件</p>
-                    </el-tab-pane>
-                    <el-tab-pane label="事件" name="events">
-                        <!-- <EventList v-if="curComponent" /> -->
-                        <p class="placeholder">请选择组件</p>
-                    </el-tab-pane>
-                </el-tabs>
+                <AttrList v-if="componentSelected" />
+                <p class="placeholder" v-else>请选择组件</p>
             </section>
         </main>
     </div>
@@ -34,36 +20,20 @@ import Toolbar from "../components/Toolbar.vue"
 import ComponentList from "../components/ComponentList.vue";
 import useComponentData from "../hooks/useComponentData";
 import AttrList from "../components/AttrList/AttrList.vue";
-import Editor from "../components/Editor/Editor.vue";
+import ComponentWrapper from "../components/ComponentWrapper.vue";
 import { ref } from "vue";
 import useComponentMakerList from "../hooks/useComponentMakerList";
-import type { ComponentConfig } from "../types/core";
+import type { ComponentMaker } from "../types/core";
 import useComponentSelected from "../hooks/useComponentSelected";
-import useComponentMakerDefault from "../hooks/useComponentMakerDefault";
+import useComponentConfigDefault from "../hooks/useComponentConfigDefault";
 
 const componentData = useComponentData();
 const componentMakerList = useComponentMakerList();
 const activeName = ref('attr')
 const componentSelected = useComponentSelected()
 
-const handleDrop = (e: DragEvent) => {
-    e.preventDefault()
-    e.stopPropagation()
-    const index = e.dataTransfer?.getData('index')
-    if (!index) { return }
-    const componentMaker = componentMakerList.value[parseInt(index)]
-    let componentConfig = useComponentMakerDefault(componentMaker)
-    // TODO:属性设置默认值
-    // TODO:先不考虑这种结构“fsfs.fsfs.fsfs”
-    componentData.value.push(componentConfig);
-}
-
-const handleDragOver = (e: DragEvent) => {
-    e.preventDefault()
-    if (e?.dataTransfer?.dropEffect) {
-        e.dataTransfer.dropEffect = 'copy'
-    }
-}
+const rootAppMaker = useComponentMakerList().get("core-ui-root-app", "0.0.1") as ComponentMaker
+const rootAppConfig = useComponentConfigDefault(rootAppMaker)
 
 </script>
 <style lang="less" scoped>
@@ -99,12 +69,6 @@ const handleDragOver = (e: DragEvent) => {
             height: 100%;
             overflow: auto;
             padding: 20px;
-
-            .content {
-                width: 100%;
-                height: 100%;
-                overflow: auto;
-            }
         }
     }
 }

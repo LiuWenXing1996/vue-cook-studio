@@ -7,7 +7,6 @@
         @mouseleave="handleMouseleave"
         draggable="true"
     >
-        {{ isSlot }}
         <component :is="config.maker.component" v-bind="componentProps">
             <template v-for="(item,index) in componentProps?.slots" v-slot:[item.name]>
                 <ComponentRender :config="item.config" :is-edit="isEdit" :is-slot="true"></ComponentRender>
@@ -38,9 +37,6 @@ const props = defineProps(
         }
     }
 )
-// 控制组件包裹器的拖拽事件，达到插槽也可以拖拽放入组件的目的
-// editor 有可能会变成一个巨大的包含无数个slot的组件？
-// 编辑模式显示虚线边框？
 
 const { isEdit, config, isSlot } = toRefs(props);
 

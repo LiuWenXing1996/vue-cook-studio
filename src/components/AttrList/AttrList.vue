@@ -1,35 +1,46 @@
 <template>
     <div class="attr-list" v-if="componentSelected">
-        <el-form label-width="80px">
-            <el-form-item
-                v-for="(item,index) in componentSelected.maker.propOptions"
-                :key="index"
-                :label="item.label"
-            >
-                <component
-                    :is="propOptionComponentsMap[item.type]"
-                    :componentSelected="componentSelected"
-                    :propKey="item.key"
-                ></component>
-            </el-form-item>
-        </el-form>
+        <el-row v-for="propEditable in propEditableList">
+            <el-col :span="4">{{ propEditable.name }}</el-col>
+            <el-col :span="20">
+                <el-input v-model="propEditable.value"></el-input>
+            </el-col>
+        </el-row>
     </div>
 </template>
 <script lang="ts" setup>
+import { reactive, watch, watchEffect } from "vue";
+import type { Ref } from "vue";
+import useComponentMaker from "../../hooks/useComponentMaker";
 import useComponentSelected from "../../hooks/useComponentSelected";
-import AttrOptionInput from "./AttrOptionInput.vue";
-import AttrOptionSelect from "./AttrOptionSelect.vue";
-import AttrOptionSlotVue from "./AttrOptionSlot.vue";
-import { ComponentPropOptionType } from "../../types/core.d"
+import type { ComponentConfig, ComponentMaker } from "../../types/core";
 
-const propOptionComponentsMap = {
-    [ComponentPropOptionType.input]: AttrOptionInput,
-    [ComponentPropOptionType.select]: AttrOptionSelect,
-    [ComponentPropOptionType.slot]:AttrOptionSlotVue
+const componentSelected = useComponentSelected() as Ref<ComponentConfig>
+const maker = useComponentMaker(componentSelected.value) as ComponentMaker
+// 使用maker的propOptions似乎更合适一些
+const propEditableList = reactive(maker.propOptions.map(propOption => {
+    return {
+        name: propOption.name,
+        value: componentSelected.value.props.find(prop => prop.name === propOption.name)?.value
+    }
+}))
+
+watch(() => propEditableList, (newValue, oldValue) => {
+    let config = componentSelected.value;
+    newValue.forEach(e => {
+        const componentProp = config.props.find(p => p.name === e.name)
+        if (componentProp) {
+            componentProp.value = e.value as string
+        }
+    })
+    // componentSelected.value = config;
+}, { deep: true })
+const { propOptions } = maker
+const componentProps = componentSelected.value.props;
+const getProp = (name: string) => {
+    return componentProps.find(e => e.value === name) || {}
 }
-// TODO:实现其他的属性选项输入框。。
 
-const componentSelected = useComponentSelected()
 </script>
 <style lang="less" scoped>
 .attr-list {

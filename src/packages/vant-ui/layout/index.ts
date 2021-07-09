@@ -8,10 +8,9 @@ import useComponentMakerDefault from '../../../hooks/useComponentMakerDefault';
 import useComponentMakerList from '../../../hooks/useComponentMakerList';
 import ButtonComponentMaker from "../button/index"
 export default defineComponentConfigMaker({
-    key: "vant-ui-button",
-    label: '按钮',
+    key: "vant-ui-layout",
+    label: '布局',
     component: markRaw(Component),
-    preview: markRaw(Preview),
     propOptions: [
         defineComponentPropOptionSlot({
             type: ComponentPropOptionType.slot,

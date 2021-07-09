@@ -1,20 +1,23 @@
 <template>
     <div class="component-list" @dragstart="handleDragStart">
         <div
-            v-for="(item, index) in componentMakerList"
+            v-for="(maker, index) in componentMakerList"
             :key="index"
             class="list"
             draggable="true"
             :data-index="index"
-            :data-label="item.label"
+            :data-label="maker.label"
         >
-            <component :is="item.preview"></component>
+            <component-wrapper :config="useComponentConfigDefault(maker)"></component-wrapper>
+            <!-- <component :is="item.preview"></component> -->
         </div>
     </div>
 </template>
 <script lang="ts" setup>
 import useComponentMakerList from "../hooks/useComponentMakerList";
-const componentMakerList = useComponentMakerList();
+import ComponentWrapper from "./ComponentWrapper.vue";
+import useComponentConfigDefault from "../hooks/useComponentConfigDefault";
+const componentMakerList = useComponentMakerList().data;
 const handleDragStart = (e: DragEvent) => {
     if (!(e.target instanceof HTMLDivElement)) {
         return;
