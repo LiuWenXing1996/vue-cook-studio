@@ -1,31 +1,25 @@
 <template>
     <div class="component-list" @dragstart="handleDragStart">
-        <div
-            v-for="(maker, index) in componentMakerList"
-            :key="index"
-            class="list"
-            draggable="true"
-            :data-index="index"
-            :data-label="maker.label"
-        >
-            <component-wrapper :config="getComponentConfigDefault(maker)"></component-wrapper>
-        </div>
+        <ComponentMakerVue v-for="maker in componentMakerList" :maker="maker"></ComponentMakerVue>
     </div>
 </template>
 <script lang="ts" setup>
+import ComponentMakerVue from "./ComponentMaker.vue";
 import { useComponentMakerList } from "./hooks";
-import ComponentWrapper from "../ComponentWrapper/ComponentWrapper.vue";
-import { getComponentConfigDefault } from "./utils";
 
 const componentMakerList = useComponentMakerList().data;
 const handleDragStart = (e: DragEvent) => {
     if (!(e.target instanceof HTMLDivElement)) {
         return;
     }
-    if (!e?.target?.dataset?.index) {
+    if (!e?.target?.dataset?.name) {
         return;
     }
-    e?.dataTransfer?.setData('index', e?.target?.dataset?.index)
+    if (!e?.target?.dataset?.version) {
+        return;
+    }
+    e?.dataTransfer?.setData('name', e?.target?.dataset?.name)
+    e?.dataTransfer?.setData('version', e?.target?.dataset?.version)
 }
 </script>
 <style lang="less" scoped>

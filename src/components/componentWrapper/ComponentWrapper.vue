@@ -12,7 +12,7 @@
         draggable="true"
         :data-uid="config.uid"
     >
-        <component v-if="maker" :is="maker.component" v-bind="componentProps">
+        <component v-if="maker" :is="maker.component(config)" v-bind="componentProps">
             <template v-for="slot in config.slots" v-slot:[slot.name]>
                 <ComponentWrapper
                     :config="config"
@@ -27,10 +27,10 @@
 </template>
 <script lang="ts" setup>
 import { computed, defineProps, ref, toRefs, watch } from "vue";
-import type { Ref } from "vue"
+import type { Ref, CSSProperties } from "vue"
 import { useComponentHovered, useComponentSelected, useComponentDragged } from "./hooks";
 import type { ComponentConfig } from "./types";
-import { findMaker } from "../ComponentMakerList/utils";
+import { findMaker, findMakerByNameAndVersion, getComponentConfigDefault } from "../ComponentMaker/utils";
 import { getComponentPropsObject } from "./utils";
 
 const props = defineProps(
@@ -51,24 +51,24 @@ const props = defineProps(
 )
 
 const { isEdit, config, isSlot } = toRefs(props)
+const componentSelected = useComponentSelected()
+const componentDragged = useComponentDragged()
+const componentHovered = useComponentHovered()
+
 // @ts-ignore
 const maker = computed(() => findMaker(config.value))
-const selected = computed(() => componentSelected.value === config.value)
-const hovered = computed(() => componentHovered.value === config.value)
-const componentSelected = useComponentSelected()
-const componentHovered = useComponentHovered()
-const componentDragged = useComponentDragged()
+const selected = computed(() => componentSelected.value?.uid === config.value.uid)
+const hovered = computed(() => componentHovered.value?.uid === config.value.uid)
 const componentProps = computed(() => getComponentPropsObject(config.value))
 const wrapperStyle = computed(() => {
     const { wrapperAttrs } = config.value
     return {
-        height: wrapperAttrs.find(({ name }) => name === "height")?.value,
-        width: wrapperAttrs.find(({ name }) => name === "width")?.value,
-        display: wrapperAttrs.find(({ name }) => name === "display")?.value,
-        position: wrapperAttrs.find(({ name }) => name === "position")?.value
-    }
+        height: wrapperAttrs.height,
+        width: wrapperAttrs.width,
+        position: wrapperAttrs.position,
+        display: wrapperAttrs.display
+    } as CSSProperties
 })
-// TODO:const wr =computed(()=>)  获取wrapper的属性值，并把它赋值给相应的样式数据
 
 const handleClick = (event: MouseEvent) => {
     if (!isEdit) {
@@ -125,17 +125,18 @@ const handleDragOver = (e: DragEvent) => {
 const handleDrop = (e: DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    // if (componentDragged.value) {
+    if (componentDragged.value) {
 
-    // } else {
-    //     const index = e.dataTransfer?.getData('index')
-    //     if (!index) { return }
-    //     const componentMaker = useComponentMakerList().data.value[parseInt(index)]
-    //     let componentConfig = useComponentConfigDefault(componentMaker)
-    //     // TODO:属性设置默认值
-    //     // TODO:先不考虑这种结构“fsfs.fsfs.fsfs”
-    //     config.value.slots[0].value.push(componentConfig);
-    // }
+    } else {
+        const makerName = e.dataTransfer?.getData('name')
+        const makerVersion = e.dataTransfer?.getData('version')
+        if (!makerName) { return }
+        if (!makerVersion) { return }
+        const componentMaker = findMakerByNameAndVersion(makerName, makerVersion)
+        if (!componentMaker) { return }
+        let componentConfig = getComponentConfigDefault(componentMaker)
+        config.value.slots[0].value.push(componentConfig);
+    }
 }
 </script>
 <style lang="less" scoped>
@@ -146,6 +147,9 @@ const handleDrop = (e: DragEvent) => {
     // position: relative;
 
     &.isEdit {
+        // * {
+        //     // pointer-events: none;
+        // }
         &::before {
             content: "";
             width: 100%;

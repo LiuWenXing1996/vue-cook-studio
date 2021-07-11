@@ -1,18 +1,21 @@
-import { ComponentConfig } from './../ComponentWrapper/types';
+import { ComponentConfig, ComponentWrapperAttrs } from './../ComponentWrapper/types';
 import { Component } from "vue"
-import { EditorConfig, EditableValue } from '../editors/editorConfig';
-import { JsonType } from '../../utils/jsonType';
-
-export interface ComponentWrapperAttr {
-    name: string,
-    value: JsonType,
-}
+import { EditableValue } from '../editors/editorConfig';
 
 export interface ComponentMaker {
     name: string,
     version: string,
     label: string,
-    component: (config: ComponentConfig) => Component,
-    wrapperAttrOptions: (config: ComponentConfig) => EditableValue[],
-    wrapperAttrOptionsTransformer: (wrapperAttrOptions: EditableValue[], config: ComponentConfig) => {}
+    component: (config: Partial<ComponentConfig>) => Component,
+    wrapperAttrOptions: (config: Partial<ComponentConfig>) => EditableValue[],
+    wrapperAttrOptionsTransformer: (wrapperAttrOptions: EditableValue[], config: Partial<ComponentConfig>) => ComponentWrapperAttrs,
+    propOptions: (config: Partial<ComponentConfig>) => EditableValue[],
+    slotOptions: (config: Partial<ComponentConfig>) => EditableValue[]
+}
+
+export interface ComponentMakerOptional extends Partial<ComponentMaker> {
+    name: string,
+    version: string,
+    label: string,
+    component: (config: Partial<ComponentConfig>) => Component
 }

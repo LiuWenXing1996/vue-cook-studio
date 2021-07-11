@@ -15,7 +15,7 @@ export interface EditorConfigBase<T extends JsonType> {
 }
 
 export interface EditableValue {
-    name: "string",
+    name: string,
     editorConfig: EditorConfig
 }
 

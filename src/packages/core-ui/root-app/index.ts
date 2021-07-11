@@ -1,15 +1,23 @@
 import { shallowRef, markRaw } from 'vue';
 import { EditorType } from '../../../components/editors/editorConfig';
-import { defineComponentMaker } from "../../../components/ComponentMakerList/utils"
+import { defineComponentMaker } from "../../../components/ComponentMaker/utils"
 import Component from "./Component.vue";
 export default defineComponentMaker({
     name: "core-ui-root-app",
     version: "0.0.1",
     label: '核心UI-主应用',
-    component: markRaw(Component),
-    wrapperAttrOptions: [],
-    propOptions: [],
-    slotOptions: [
+    component: () => markRaw(Component),
+    wrapperAttrOptions: () => [],
+    propOptions: () => [],
+    wrapperAttrOptionsTransformer: () => {
+        return {
+            height: "100%",
+            width: "100%",
+            position: "relative",
+            display: "block"
+        }
+    },
+    slotOptions: () => [
         {
             name: "default",
             editorConfig: {

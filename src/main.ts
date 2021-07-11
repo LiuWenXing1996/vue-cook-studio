@@ -6,7 +6,7 @@ import router from './router'
 import "./styles/global.less"
 import vantUiMakerList from './packages/vant-ui'
 import coreUiMakerList from "./packages/core-ui"
-import { useComponentMakerList } from './components/ComponentMakerList/hooks'
+import { useComponentMakerList } from './components/ComponentMaker/hooks'
 useComponentMakerList().set(...coreUiMakerList)
 useComponentMakerList().set(...vantUiMakerList)
 const app = createApp(App)
