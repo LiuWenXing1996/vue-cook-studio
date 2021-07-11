@@ -21,7 +21,7 @@ export interface ComponentMaker {
     version: string,
     label: string,
     component: Component,
-    wrapperAttrOptions: ComponentWrapperAttrOption[]
+    wrapperAttrOptions: ComponentWrapperAttrOption[],
     propOptions: ComponentPropOption[],
     slotOptions: ComponentSlotOption[]
 }

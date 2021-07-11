@@ -2,6 +2,7 @@
     <div
         class="component-wrapper"
         :class="{ selected: selected, hovered: hovered, isEdit: isEdit, isSlot: isSlot }"
+        :style="wrapperStyle"
         @click="handleClick"
         @mouseover="handleMouseover"
         @mouseleave="handleMouseleave"
@@ -58,6 +59,16 @@ const componentSelected = useComponentSelected()
 const componentHovered = useComponentHovered()
 const componentDragged = useComponentDragged()
 const componentProps = computed(() => getComponentPropsObject(config.value))
+const wrapperStyle = computed(() => {
+    const { wrapperAttrs } = config.value
+    return {
+        height: wrapperAttrs.find(({ name }) => name === "height")?.value,
+        width: wrapperAttrs.find(({ name }) => name === "width")?.value,
+        display: wrapperAttrs.find(({ name }) => name === "display")?.value,
+        position: wrapperAttrs.find(({ name }) => name === "position")?.value
+    }
+})
+// TODO:const wr =computed(()=>)  获取wrapper的属性值，并把它赋值给相应的样式数据
 
 const handleClick = (event: MouseEvent) => {
     if (!isEdit) {
@@ -129,10 +140,10 @@ const handleDrop = (e: DragEvent) => {
 </script>
 <style lang="less" scoped>
 .component-wrapper {
-    height: 100%;
-    width: 100%;
-    display: inline-block;
-    position: relative;
+    // height: 100%;
+    // width: 100%;
+    // display: inline-block;
+    // position: relative;
 
     &.isEdit {
         &::before {
