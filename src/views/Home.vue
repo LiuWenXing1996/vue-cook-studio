@@ -6,6 +6,9 @@
                 <ComponentMakerList></ComponentMakerList>
             </section>
             <section class="center">
+                <div class="grid-wrapper">
+                    <Grid></Grid>
+                </div>
                 <ComponentWrapper :config="rootAppConfig" :is-edit="true" />
             </section>
             <section class="right">
@@ -18,14 +21,15 @@
 <script lang="ts" setup>
 import Toolbar from "../components/Toolbar.vue"
 import ComponentMakerList from "../components/ComponentMaker/ComponentMakerList.vue";
+import Grid from "../components/Grid.vue";
 import OptionsPanel from "../components/OptionsPanel.vue";
 import ComponentWrapper from "../components/ComponentWrapper/ComponentWrapper.vue";
 import { useComponentMakerList } from "../components/ComponentMaker/hooks";
 import type { ComponentMaker } from "../components/ComponentMaker/types";
-import useComponentSelected from "../hooks/useComponentSelected";
 import { getComponentConfigDefault } from "../components/ComponentMaker/utils";
+import { useComponentSelected } from "../components/ComponentWrapper/hooks";
 
-// TODO:根应用app组件也提出来
+// TODO根应用app组件也提出来
 const componentSelected = useComponentSelected()
 const rootAppMaker = useComponentMakerList().get("core-ui-root-app", "0.0.1") as ComponentMaker
 const rootAppConfig = getComponentConfigDefault(rootAppMaker)
@@ -64,6 +68,14 @@ const rootAppConfig = getComponentConfigDefault(rootAppMaker)
             height: 100%;
             overflow: auto;
             padding: 20px;
+            position: relative;
+            .grid-wrapper {
+                position: absolute;
+                width: calc(100% - 40px);
+                height: calc(100% - 40px);
+                top: 20px;
+                left: 20px;
+            }
         }
     }
 }

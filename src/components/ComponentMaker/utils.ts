@@ -2,6 +2,7 @@ import { ComponentMaker, ComponentMakerOptional } from './types';
 import { v4 as uuidv4 } from 'uuid';
 import { ComponentConfig } from '../ComponentWrapper/types';
 import { useComponentMakerList } from './hooks';
+import { EditorType } from '../editors/editorConfig';
 
 export function getComponentConfigDefault(maker: ComponentMaker): ComponentConfig {
     const uid = uuidv4();
@@ -47,7 +48,19 @@ export function defineComponentMaker(makerOptional: ComponentMakerOptional): Com
                 display: "inline-block"
             }
         },
-        wrapperAttrOptions: () => [],
+        wrapperAttrOptions: () => [
+            {
+                name: 'height',
+                editorConfig: {
+                    type: EditorType.input,
+                    isFreeze: false,
+                    label: "高度",
+                    tips: "高度dd",
+                    default: 'fit-content',
+                    value: 'fit-content'
+                }
+            }
+        ],
         propOptions: () => [],
         slotOptions: () => [],
         ...makerOptional,

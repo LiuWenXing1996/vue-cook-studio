@@ -7,8 +7,6 @@ export default defineComponentMaker({
     version: "0.0.1",
     label: '核心UI-主应用',
     component: () => markRaw(Component),
-    wrapperAttrOptions: () => [],
-    propOptions: () => [],
     wrapperAttrOptionsTransformer: () => {
         return {
             height: "100%",

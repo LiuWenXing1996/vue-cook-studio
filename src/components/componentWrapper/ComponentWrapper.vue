@@ -57,7 +57,7 @@ const componentHovered = useComponentHovered()
 
 // @ts-ignore
 const maker = computed(() => findMaker(config.value))
-const selected = computed(() => componentSelected.value?.uid === config.value.uid)
+const selected = computed(() => componentSelected.value?.uid === config.value.uid) // WHY为什么必须要用UID来判断，直接判断对象相等不可以呢？
 const hovered = computed(() => componentHovered.value?.uid === config.value.uid)
 const componentProps = computed(() => getComponentPropsObject(config.value))
 const wrapperStyle = computed(() => {
