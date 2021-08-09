@@ -1,18 +1,24 @@
 <template>
-    <VantButton :text="text" @click="dddd"></VantButton>
+    <VantButton :text="text" @click="emits('click')"></VantButton>
 </template>
 <script lang="ts" setup>
-import { defineProps } from '@vue/runtime-core';
+import { defineProps, toRefs } from '@vue/runtime-core';
 import VantButton from 'vant/es/button';
 import 'vant/es/button/style';
 
-const dddd=()=>{
-    console.log("dddddd")
-}
 
-defineProps({
-    text: String
+const props = defineProps({
+    text: String,
+    count: Number
 })
+const emits = defineEmits(["click"])
+
+const { text, count } = toRefs(props)
+
+
+const dddd = () => {
+    console.log(count?.value)
+}
 
 </script>
 <style lang="less" scoped>

@@ -16,6 +16,9 @@
                 <p class="placeholder" v-else>请选择组件</p>
             </section>
         </main>
+        <div class="preview">
+            <ComponentWrapper :config="rootAppConfig" />
+        </div>
     </div>
 </template>
 <script lang="ts" setup>
@@ -28,11 +31,17 @@ import { useComponentMakerList } from "../components/ComponentMaker/hooks";
 import type { ComponentMaker } from "../components/ComponentMaker/types";
 import { getComponentConfigDefault } from "../components/ComponentMaker/utils";
 import { useComponentSelected } from "../components/ComponentWrapper/hooks";
+import createLoop from "../utils/createLoop";
+import { ref } from "vue";
 
 // TODO根应用app组件也提出来
 const componentSelected = useComponentSelected()
 const rootAppMaker = useComponentMakerList().get("core-ui-root-app", "0.0.1") as ComponentMaker
-const rootAppConfig = getComponentConfigDefault(rootAppMaker)
+const rootAppConfig = ref(getComponentConfigDefault(rootAppMaker))
+
+// createLoop(rootAppConfig.value, (config: any) => {
+//     rootAppConfig.value = config
+// })
 
 </script>
 <style lang="less" scoped>
@@ -77,6 +86,13 @@ const rootAppConfig = getComponentConfigDefault(rootAppMaker)
                 left: 20px;
             }
         }
+    }
+    .preview {
+        width: 200px;
+        height: 200px;
+        position: fixed;
+        top: 0;
+        right: 0;
     }
 }
 </style>

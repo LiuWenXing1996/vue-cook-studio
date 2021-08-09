@@ -2,11 +2,11 @@
     <div class="options-panel" v-if="componentSelected">
         <el-collapse v-model="activeNames">
             <el-collapse-item title="包裹器" name="wrapper">
-                <div
-                    v-for="wrapperAttrOption in wrapperAttrOptions"
-                >{{ wrapperAttrOption.name }}:{{ wrapperAttrOption.editorConfig.value }}</div>
+                <!-- <EditorUi :config="editorConfig" v-for="editorConfig in wrapperAttrOptions"></EditorUi> -->
             </el-collapse-item>
-            <el-collapse-item title="属性" name="prop"></el-collapse-item>
+            <el-collapse-item title="属性" name="prop">
+                <EditorUi :config="editorConfig" :componentConfig="componentSelected" v-for="editorConfig in propOptions"></EditorUi>
+            </el-collapse-item>
             <el-collapse-item title="插槽" name="slot"></el-collapse-item>
             <el-collapse-item title="动画" name="animation"></el-collapse-item>
         </el-collapse>
@@ -19,12 +19,13 @@ import { findMaker } from "./ComponentMaker/utils"
 import { useComponentSelected } from "./ComponentWrapper/hooks"
 import type { ComponentConfig } from "./ComponentWrapper/types"
 import type { ComponentMaker } from "./ComponentMaker/types"
+import EditorUi from "./Editor/EditorUi.vue"
 
 const activeNames = ref<string[]>([])
 const componentSelected = useComponentSelected() as Ref<ComponentConfig>
 const maker = computed(() => findMaker(componentSelected.value)) as Ref<ComponentMaker>
 const wrapperAttrOptions = computed(() => maker.value.wrapperAttrOptions(componentSelected.value))
-
+const propOptions = computed(() => maker.value.propOptions(componentSelected.value))
 // TODO:属性编辑实现
 
 </script>

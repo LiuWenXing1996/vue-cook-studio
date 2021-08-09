@@ -26,8 +26,9 @@ export interface ComponentSlot {
 export interface ComponentConfig {
     uid: string,
     wrapperAttrs: ComponentWrapperAttrs,
-    props: ComponentProp[],
+    props: Record<string, JsonType>,
     slots: ComponentSlot[],
+    emits: Record<string, JsonType>,
     makerName: string,
     makerVersion: string
 }

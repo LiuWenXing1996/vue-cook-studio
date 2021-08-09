@@ -1,6 +1,6 @@
 type JsonTypePrimitive = string | number | boolean | null
 type JsonTypeArray = Array<JsonType>
-type JsonTypeObject = {
+export type JsonTypeObject = {
     [key: string]: JsonType
 }
 

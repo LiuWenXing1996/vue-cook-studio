@@ -12,7 +12,7 @@
         draggable="true"
         :data-uid="config.uid"
     >
-        <component v-if="maker" :is="maker.component(config)" v-bind="componentProps">
+        <component v-if="maker" :is="maker.component(config)" v-bind="componentProps" v-on="componentEmits">
             <template v-for="slot in config.slots" v-slot:[slot.name]>
                 <ComponentWrapper
                     :config="config"
@@ -31,7 +31,7 @@ import type { Ref, CSSProperties } from "vue"
 import { useComponentHovered, useComponentSelected, useComponentDragged } from "./hooks";
 import type { ComponentConfig } from "./types";
 import { findMaker, findMakerByNameAndVersion, getComponentConfigDefault } from "../ComponentMaker/utils";
-import { getComponentPropsObject } from "./utils";
+import { getComponentEmitsObject, getComponentPropsObject } from "./utils";
 
 const props = defineProps(
     {
@@ -60,6 +60,7 @@ const maker = computed(() => findMaker(config.value))
 const selected = computed(() => componentSelected.value?.uid === config.value.uid) // WHY为什么必须要用UID来判断，直接判断对象相等不可以呢？
 const hovered = computed(() => componentHovered.value?.uid === config.value.uid)
 const componentProps = computed(() => getComponentPropsObject(config.value))
+const componentEmits = computed(() => getComponentEmitsObject(config.value))
 const wrapperStyle = computed(() => {
     const { wrapperAttrs } = config.value
     return {
@@ -71,7 +72,7 @@ const wrapperStyle = computed(() => {
 })
 
 const handleClick = (event: MouseEvent) => {
-    if (!isEdit) {
+    if (!isEdit.value) {
         return
     }
     event.stopPropagation()
@@ -83,7 +84,7 @@ const handleClick = (event: MouseEvent) => {
 }
 
 const handleMouseover = (event: MouseEvent) => {
-    if (!isEdit) {
+    if (!isEdit.value) {
         return
     }
     event.stopPropagation()
@@ -91,7 +92,7 @@ const handleMouseover = (event: MouseEvent) => {
 }
 
 const handleMouseleave = (event: MouseEvent) => {
-    if (!isEdit) {
+    if (!isEdit.value) {
         return
     }
     event.stopPropagation()
