@@ -7,4 +7,5 @@ export { default as getComponentConfigDefault } from "./utils/getComponentConfig
 export { default as addMenuItem } from "./utils/addMenuItem"
 export { default as defineInspector } from "./utils/defineInspector"
 export { default as useInspectList } from "./hooks/useInspectList"
+export { default as useComponentSelected } from "./hooks/useComponentSelected"
 // export { default as IComponentMaker } from "./types/IComponentMaker"
