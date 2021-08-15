@@ -38,9 +38,9 @@ const handleDragStart = (e: DragEvent) => {
 .component-maker {
     position: relative;
     width: calc(100% - 20px);
-    margin-left: 10px;
+    // margin-left: 10px;
     border: solid 3px #ebeef5;
-    margin-top: 20px;
+    // margin-top: 20px;
     min-height: 120px;
     display: flex;
     align-items: center;

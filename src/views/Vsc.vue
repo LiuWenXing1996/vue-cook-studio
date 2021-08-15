@@ -3,12 +3,14 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { OperatePanel, getComponentConfigDefault, useComponentMakerList,addMenuItem } from "../lib"
-import { RootAppMaker,VantButtonMaker} from "../packages/test-pkg"
+import { OperatePanel, getComponentConfigDefault, useComponentMakerList,addMenuItem, useInspectList} from "../lib"
+import { RootAppMaker,VantButtonMaker,InputInspector} from "../packages/test-pkg"
 
 const makerList = useComponentMakerList()
 makerList.value.push(RootAppMaker,VantButtonMaker)
 const rootAppConfig = ref(getComponentConfigDefault(RootAppMaker))
+const inspectorList =useInspectList()
+inspectorList.value.push(InputInspector)
 addMenuItem("编辑",{
     label:"sssss",
     children:[

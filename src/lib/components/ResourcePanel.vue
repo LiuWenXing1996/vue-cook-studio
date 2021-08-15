@@ -1,21 +1,20 @@
 <template>
     <n-collapse>
-        <n-collapse-item title="青铜" name="1">
-            <component-maker v-for="maker in makerList" :maker="maker"></component-maker>
-        </n-collapse-item>
-        <n-collapse-item title="白银" name="2">
-            <div>很好</div>
-        </n-collapse-item>
-        <n-collapse-item title="黄金" name="3">
-            <div>真棒</div>
+        <n-collapse-item :title="name.toString()" :name="name" v-for="(list,name) in makerGroup">
+            <component-maker v-for="maker in list" :maker="maker"></component-maker>
         </n-collapse-item>
     </n-collapse>
 </template>
 <script setup lang="ts">
+import { computed } from "@vue/runtime-core";
+import { groupBy } from "lodash-es";
 import { NCollapse, NCollapseItem } from "naive-ui"
 import useComponentMakerList from "../hooks/useComponentMakerList";
 import ComponentMaker from "./ComponentMaker.vue";
 const makerList = useComponentMakerList();
+const makerGroup = computed(() => {
+    return groupBy(makerList.value, "package")
+})
 </script>
 <style lang="less">
 </style>

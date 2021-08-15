@@ -1,24 +1,22 @@
 <template>
-    <div class="layout-wrapper">
-        <n-layout position="absolute">
-            <n-layout-header class="header" bordered>
-                <operate-menu></operate-menu>
-            </n-layout-header>
-            <n-layout has-sider position="absolute" style="top: 64px; bottom: 0px;">
-                <n-layout-sider bordered content-style="padding: 24px;">
-                    <resource-panel></resource-panel>
-                </n-layout-sider>
-                <n-layout
-                    content-style="padding: 24px;"
-                >
-                    <div class="grid-wrapper">
-                        <operate-grid></operate-grid>
-                    </div>
-                    <ComponentConfigRender :config="componentConfig"></ComponentConfigRender>
-                    <inspector-render></inspector-render>
-                </n-layout>
-            </n-layout>
-        </n-layout>
+    <div class="operate-panel">
+        <div class="header">
+            <operate-menu></operate-menu>
+        </div>
+        <div class="content">
+            <div class="left">
+                <resource-panel></resource-panel>
+            </div>
+            <div class="center">
+                <div class="grid-wrapper">
+                    <operate-grid></operate-grid>
+                </div>
+                <ComponentConfigRender :config="componentConfig" :is-edit="true"></ComponentConfigRender>
+            </div>
+            <div class="right">
+                <inspector-panel></inspector-panel>
+            </div>
+        </div>
     </div>
 </template>
 <script setup lang="ts">
@@ -26,7 +24,8 @@ import { NLayout, NLayoutSider, NLayoutHeader, NLayoutFooter } from "naive-ui"
 import OperateMenu from "./OperateMenu.vue"
 import OperateGrid from "./OperateGrid.vue"
 import ResourcePanel from "./ResourcePanel.vue";
-import InspectorRender from "./InspectorRender.vue";
+import InspectorPanel from "./InspectorPanel.vue";
+import InspectorList from "./InspectorList.vue";
 import ComponentConfigRender from "./ComponentConfigRender.vue";
 import type IComponentConfig from "../types/IComponentConfig";
 import { toRefs } from "vue";
@@ -98,24 +97,47 @@ const handleMouseleave = (e: MouseEvent) => {
     unHighlight()
 }
 
+const handleClick = () => {
+
+}
+
 </script>
 <style lang="less" scoped>
-.layout-wrapper {
+.operate-panel {
     height: 100%;
-    position: relative;
     .header {
-        height: 64px;
+        height: 40px;
         padding: 2px;
         padding-left: 10px;
         display: flex;
         align-items: center;
+        border-bottom: rgb(239, 239, 245) 1px solid;
     }
-    .grid-wrapper {
-        position: absolute;
-        width: calc(100% - 40px);
+    .content {
         height: calc(100% - 40px);
-        top: 20px;
-        left: 20px;
+        display: flex;
+        .left {
+            width: 200px;
+            padding: 10px;
+            border-right: rgb(239, 239, 245) 1px solid;
+        }
+        .center {
+            width: calc(100% - 400px);
+            position: relative;
+            padding: 10px;
+            .grid-wrapper {
+                position: absolute;
+                width: calc(100% - 20px);
+                height: calc(100% - 20px);
+                top: 10px;
+                left: 10px;
+            }
+        }
+        .right {
+            width: 200px;
+            padding: 10px;
+            border-left: rgb(239, 239, 245) 1px solid;
+        }
     }
 }
 </style>

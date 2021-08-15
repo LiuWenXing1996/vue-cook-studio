@@ -1,21 +1,29 @@
 // TODO:inspector 渲染器
 <template>
     <div class="inspector-render">
-        <div
-            class="header"
-            @mousemove="handleMove"
-            @mousedown="handleDown"
-            @mouseup="handleUp"
-        >
+        <div class="header" @mousemove="handleMove" @mousedown="handleDown" @mouseup="handleUp">
             <button>关闭</button>
             <button>固定</button>
         </div>
-        <div class="content">fffff</div>
+        <div class="content">
+            <component :is="inspector.component"></component>
+        </div>
     </div>
 </template>
 <script setup lang="ts">
-import { emptyLight } from "naive-ui/lib/empty/styles";
-import { computed, ref } from "vue";
+import { computed, ref, toRefs } from "vue";
+import type IInspector from "../types/IInspector";
+
+const props = defineProps(
+    {
+        inspector: {
+            type: Object as () => IInspector,
+            required: true
+        }
+    }
+)
+
+const { inspector } = toRefs(props)
 
 const left = ref(12);
 const leftPx = computed(() => `${left.value}px`)
