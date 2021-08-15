@@ -11,5 +11,5 @@ export default interface IComponentAttrs {
     class?: string[],
     props?: Record<string, IJson>,
     slots?: Record<string, IComponentConfig[]>,
-    emits?: Record<string, Function>,
+    emits?: Record<string, string>,
 }

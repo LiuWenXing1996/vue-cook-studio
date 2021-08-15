@@ -10,5 +10,6 @@ export default function getComponentConfigDefault(maker: IComponentMaker): IComp
         makerPackage: maker.package,
         attrs: {}
     };
+    config.attrs = maker?.makeDefaultAttrs?.(config);
     return config
 }

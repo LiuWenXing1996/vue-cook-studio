@@ -2,6 +2,7 @@
     <div
         class="component-maker"
         draggable="true"
+        @dragstart="handleDragStart"
         :data-name="maker.name"
         :data-label="maker.label"
         :data-version="maker.version"
@@ -23,6 +24,8 @@ const props = defineProps({
 })
 
 const { maker } = toRefs(props)
+
+
 
 </script>
 <style lang="less" scoped>

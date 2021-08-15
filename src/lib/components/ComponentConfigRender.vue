@@ -1,14 +1,13 @@
 <template>
     <component
         v-if="maker"
-        :is="maker.makeComponent"
-        v-bind="attrs?.props"
-        v-on="attrs?.emits"
-        :class="[attrs?.class]"
-        :style="attrs?.style"
+        :is="maker.makeComponent(config)"
+        v-bind="config?.attrs?.props"
+        :class="[config?.attrs?.class]"
+        :style="config?.attrs?.style"
     >
-        <template v-for="(slot,name) in attrs?.slots" v-slot:[name]>
-            <component-config-render :config="config" v-for="config in slot"></component-config-render>
+        <template v-for="(slot,name) in config?.attrs?.slots" v-slot:[name]>
+            <component-config-render :config="_config" v-for="_config in slot"></component-config-render>
         </template>
     </component>
     <span v-else>{{ config.makerPackage }} - {{ config.makerName }}没有找到</span>
@@ -29,6 +28,5 @@ const props = defineProps(
 
 const { config } = toRefs(props)
 const maker = useComponentMaker(config.value.makerName, config.value.makerPackage)
-const attrs = computed(() => maker.value?.makeAttrs?.(config.value))
 
 </script>

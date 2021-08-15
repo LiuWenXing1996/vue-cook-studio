@@ -7,5 +7,6 @@ export default interface IComponentMaker {
     name: string,
     label: string,
     makeComponent: (config: IComponentConfig) => Component,
-    makeAttrs?: (config: IComponentConfig) => IComponentAttrs
+    makeEditors?: (config: IComponentConfig) => IComponentAttrs,
+    makeDefaultAttrs?: (config: IComponentConfig) => IComponentAttrs
 }

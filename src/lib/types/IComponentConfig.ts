@@ -4,7 +4,7 @@ export default interface IComponentConfig {
     uid: string,
     makerName: string,
     makerPackage: string,
-    attrs: {
+    attrs?: {
         render?: {
             style?: CSSProperties,
             class?: string[]
@@ -13,7 +13,7 @@ export default interface IComponentConfig {
         class?: string[],
         props?: Record<string, any>,
         slots?: Record<string, IComponentConfig[]>,
-        emits?: Record<string, Function>,
+        emits?: Record<string, string>,
     }
 }
 

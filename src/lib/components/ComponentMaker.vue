@@ -2,27 +2,36 @@
     <div
         class="component-maker"
         draggable="true"
+        @dragstart="handleDragStart"
         :data-name="maker.name"
+        :data-package="maker.package"
         :data-label="maker.label"
-        :data-version="maker.version"
     >
-        <component-wrapper :config="getComponentConfigDefault(maker)"></component-wrapper>
+        <ComponentConfigRender :config="getComponentConfigDefault(maker)"></ComponentConfigRender>
     </div>
 </template>
 <script lang="ts" setup>
-import ComponentWrapper from "../ComponentWrapper/ComponentWrapper.vue"
+import ComponentConfigRender from "./ComponentConfigRender.vue"
 import { toRefs, defineProps } from "vue"
-import type { ComponentMaker } from "./types"
-import { getComponentConfigDefault } from "./utils"
+import type IComponentMaker from "../types/IComponentMaker"
+import getComponentConfigDefault from "../utils/getComponentConfigDefault"
 
 const props = defineProps({
     maker: {
-        type: Object as () => ComponentMaker,
+        type: Object as () => IComponentMaker,
         required: true
     }
 })
 
 const { maker } = toRefs(props)
+
+const handleDragStart = (e: DragEvent) => {
+    if (!(e.target instanceof HTMLDivElement)) {
+        return;
+    }
+    e?.dataTransfer?.setData('name', maker.value.name)
+    e?.dataTransfer?.setData('package', maker.value.package)
+}
 
 </script>
 <style lang="less" scoped>
