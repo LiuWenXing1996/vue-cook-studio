@@ -15,6 +15,7 @@
             </div>
             <div class="right">
                 <inspector-panel></inspector-panel>
+                <editor-panel></editor-panel>
             </div>
         </div>
     </div>
@@ -26,6 +27,7 @@ import OperateGrid from "./OperateGrid.vue"
 import ResourcePanel from "./ResourcePanel.vue";
 import InspectorPanel from "./InspectorPanel.vue";
 import InspectorList from "./InspectorList.vue";
+import EditorPanel from "./EditorPanel.vue"
 import ComponentConfigRender from "./ComponentConfigRender.vue";
 import type IComponentConfig from "../types/IComponentConfig";
 import { toRefs } from "vue";
@@ -122,7 +124,7 @@ const handleClick = () => {
             border-right: rgb(239, 239, 245) 1px solid;
         }
         .center {
-            width: calc(100% - 400px);
+            width: calc(100% - 600px);
             position: relative;
             padding: 10px;
             .grid-wrapper {
@@ -134,7 +136,7 @@ const handleClick = () => {
             }
         }
         .right {
-            width: 200px;
+            width: 400px;
             padding: 10px;
             border-left: rgb(239, 239, 245) 1px solid;
         }

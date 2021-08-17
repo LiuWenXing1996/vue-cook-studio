@@ -1,8 +1,8 @@
 <template>
     <div
         class="component-config-render"
-        :class="[{ selected: selected, hovered: hovered, isEdit: isEdit, isSlot: isSlot }, config?.attrs?.class]"
-        :style="config?.attrs?.style"
+        :class="[{ selected: selected, hovered: hovered, isEdit: isEdit, isSlot: isSlot }, config?.attrs?.render?.class]"
+        :style="config?.attrs?.render?.style"
         @click="handleClick"
         @mouseover="handleMouseover"
         @mouseleave="handleMouseleave"

@@ -1,9 +1,8 @@
 import { Component } from "vue";
-import { JsonType } from "../utils/jsonType";
 import EditorConfig from "./IEditorConfig";
+import IComponentConfig from './IComponentConfig';
 
 export default interface IEditor {
     name: string,
-    showUi: (config: EditorConfig) => Component,
-    resolveRealValue: (referValue: JsonType) => any
+    ui: (componentConfig: IComponentConfig) => Component
 }
