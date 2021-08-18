@@ -14,19 +14,15 @@
                 <ComponentConfigRender :config="componentConfig" :is-edit="true"></ComponentConfigRender>
             </div>
             <div class="right">
-                <inspector-panel></inspector-panel>
                 <editor-panel></editor-panel>
             </div>
         </div>
     </div>
 </template>
 <script setup lang="ts">
-import { NLayout, NLayoutSider, NLayoutHeader, NLayoutFooter } from "naive-ui"
 import OperateMenu from "./OperateMenu.vue"
 import OperateGrid from "./OperateGrid.vue"
 import ResourcePanel from "./ResourcePanel.vue";
-import InspectorPanel from "./InspectorPanel.vue";
-import InspectorList from "./InspectorList.vue";
 import EditorPanel from "./EditorPanel.vue"
 import ComponentConfigRender from "./ComponentConfigRender.vue";
 import type IComponentConfig from "../types/IComponentConfig";

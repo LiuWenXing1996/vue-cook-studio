@@ -9,7 +9,8 @@ export default defineComponentMaker({
     makeDefaultAttrs: () => {
         return {
             slots: {
-                default: []
+                default: [],
+                other:[]
             }
         }
     }

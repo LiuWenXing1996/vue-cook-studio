@@ -29,7 +29,7 @@
                         :is-slot="true"
                     ></component-config-render>
                 </template>
-                <template v-else>
+                <template v-else-if="isEdit">
                     <component-config-render
                         :config="makeEmptySlotConfigWithName(name)"
                         :parent-slot="slot"
@@ -43,7 +43,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { computed, toRefs } from "vue";
+import { computed, ref, toRefs } from "vue";
 import useComponentDragged from "../hooks/useComponentDragged";
 import useComponentHovered from "../hooks/useComponentHovered";
 import useComponentMaker from "../hooks/useComponentMaker";
@@ -72,19 +72,24 @@ const props = defineProps(
     }
 )
 
-
+const emptySlotConfigs: Record<string, IComponentConfig> = {}
 const makeEmptySlotConfigWithName = (name: string) => {
-    const emptySlotConfig = getComponentConfigDefault(emptySlotMaker)
-    emptySlotConfig.attrs = {
-        props: {
-            name
+    let emptySlotConfig = emptySlotConfigs[name];
+    if (!emptySlotConfig) {
+        emptySlotConfig = getComponentConfigDefault(emptySlotMaker)
+        emptySlotConfig.attrs = {
+            props: {
+                name
+            }
         }
+        emptySlotConfigs[name] = emptySlotConfig;
     }
 
     return emptySlotConfig
 }
 
 const { isEdit, config, isSlot, parentSlot } = toRefs(props)
+
 const maker = useComponentMaker(config.value.makerName, config.value.makerPackage)
 const componentSelected = useComponentSelected()
 const componentDragged = useComponentDragged()

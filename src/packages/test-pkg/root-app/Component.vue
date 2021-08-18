@@ -1,5 +1,6 @@
 <template>
     <div class="root-app">
+        <slot name="other"></slot>
         <slot></slot>
         <FF></FF>
     </div>
