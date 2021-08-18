@@ -18,11 +18,13 @@
             </div>
         </div>
     </div>
+    <LogicComposer></LogicComposer>
 </template>
 <script setup lang="ts">
 import OperateMenu from "./OperateMenu.vue"
 import OperateGrid from "./OperateGrid.vue"
 import ResourcePanel from "./ResourcePanel.vue";
+import LogicComposer from "./LogicComposer.vue"
 import EditorPanel from "./EditorPanel.vue"
 import ComponentConfigRender from "./ComponentConfigRender.vue";
 import type IComponentConfig from "../types/IComponentConfig";
