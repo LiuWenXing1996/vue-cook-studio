@@ -1,31 +1,9 @@
-import { CSSProperties } from "vue";
+import IComponentConfig from "./IComponentConfig";
+import ICompositionConfig from "./ICompositionConfig";
 
-interface IData {
+export default interface IData {
     components: IComponentConfig[],
-    composition: ICompositionConfig[]
+    compositions: ICompositionConfig[]
 }
+// 每个节点都是一个组合的函数，常量值是一个函数，他是一个永远返回固定值的函数
 
-interface IComponentConfig {
-    uid: string,
-    maker: string,
-    data?: {
-        render?: {
-            style?: CSSProperties,
-            class?: string[]
-        },
-        style?: CSSProperties,
-        class?: string[],
-        props?: Record<string, any>,
-        slots?: Record<string, string[]>,
-        emits?: Record<string, string[]>,
-    }
-}
-
-interface ICompositionConfig {
-    uid: string,
-    maker: string,
-    data?: {
-        args: any[],
-        returns: any
-    }
-}

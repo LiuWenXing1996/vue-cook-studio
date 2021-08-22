@@ -3,49 +3,52 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { OperatePanel, getComponentConfigDefault, useComponentMakerList,addMenuItem, useInspectList} from "../lib"
-import { RootAppMaker,VantButtonMaker,InputInspector} from "../packages/test-pkg"
+import { OperatePanel, getComponentConfigDefault, useComponentMakerList, addMenuItem, useInspectList } from "../lib"
+import useCompositionMakerList from "../lib/hooks/useCompositionMakerList";
+import { RootAppMaker, VantButtonMaker, InputInspector, AddMaker } from "../packages/test-pkg"
 
 const makerList = useComponentMakerList()
-makerList.value.push(RootAppMaker,VantButtonMaker)
+const compositionMakerList = useCompositionMakerList()
+compositionMakerList.value.push(AddMaker)
+makerList.value.push(RootAppMaker, VantButtonMaker)
 const rootAppConfig = ref(getComponentConfigDefault(RootAppMaker))
-const inspectorList =useInspectList()
+const inspectorList = useInspectList()
 inspectorList.value.push(InputInspector)
-addMenuItem("编辑",{
-    label:"sssss",
-    children:[
+addMenuItem("编辑", {
+    label: "sssss",
+    children: [
         {
-            label:"sssssssss"
+            label: "sssssssss"
         }
     ]
 })
-addMenuItem("编辑",{
-    label:"sssstttttts",
-    children:[
+addMenuItem("编辑", {
+    label: "sssstttttts",
+    children: [
         {
-            label:"sssssssss"
+            label: "sssssssss"
         }
     ]
 })
 
-addMenuItem("编辑",{
-    label:"ssssddddddtttttts",
-    children:[
+addMenuItem("编辑", {
+    label: "ssssddddddtttttts",
+    children: [
         {
-            label:"sssssssss",
-            click:()=>{
+            label: "sssssssss",
+            click: () => {
                 alert('ssssdddddds')
             }
         }
     ]
 })
 
-addMenuItem("查看",{
-    label:"ssssddddddtttttts",
-    children:[
+addMenuItem("查看", {
+    label: "ssssddddddtttttts",
+    children: [
         {
-            label:"sssssssss",
-            click:()=>{
+            label: "sssssssss",
+            click: () => {
                 alert('ssss')
             }
         }

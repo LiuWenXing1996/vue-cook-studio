@@ -1,11 +1,24 @@
 <template>
     <div style="position: fixed;left: 10px;bottom: 10px;">
+        <button @click="test">ssss</button>
         <div id="container"></div>
     </div>
 </template>
 <script setup lang="ts">
 import { Graph } from '@antv/x6';
 import { onMounted } from 'vue';
+import useCompositionMakerList from '../hooks/useCompositionMakerList';
+import composer from '../utils/composer';
+import getCompositionConfigDefault from '../utils/getCompositionConfigDefault';
+
+const compositionMakerList = useCompositionMakerList()
+
+
+const test = () => {
+    const cmpn = getCompositionConfigDefault(compositionMakerList.value[0])
+    const ss = composer(cmpn)
+    alert(ss)
+}
 
 const data = {
     // 节点
