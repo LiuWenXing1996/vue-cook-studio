@@ -34,6 +34,8 @@ import useComponentMaker from "../hooks/useComponentMaker";
 import getComponentConfigDefault from "../utils/getComponentConfigDefault";
 import { getComponentInstanceFromElement } from "../utils/getComponentInstanceFromElement";
 import { highlightComponent, unHighlight } from "../utils/highlightComponent";
+import useCompositionMaker from "../hooks/useCompositionMaker";
+import getCompositionConfigDefault from "../utils/getCompositionConfigDefault";
 const props = defineProps(
     {
         componentConfig: {
@@ -42,6 +44,7 @@ const props = defineProps(
         }
     }
 )
+
 
 const { componentConfig } = toRefs(props)
 const componentDragged = useComponentDragged()

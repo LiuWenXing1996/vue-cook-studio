@@ -1,8 +1,15 @@
 import { ComponentPropsOptions, Prop } from "vue";
 
+interface ICompositionParam {
+    tips?: string,
+    label?: string,
+    type?: string
+}
+
 export default interface ICompositionMaker {
     name: string,
-    args: ComponentPropsOptions,
-    returns: ComponentPropsOptions | Prop<any>,
+    label: string,
+    args: Record<string, ICompositionParam>,
+    result: ICompositionParam,
     body: Function
 }

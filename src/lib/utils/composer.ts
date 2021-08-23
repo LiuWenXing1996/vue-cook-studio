@@ -7,7 +7,7 @@ export default function composer(config?: ICompositionConfig) {
     let args: any[] = []
     if (config?.data?.args) {
         args = config.data.args.map(e => {
-            let _config = useCompositionConfig(e.uid).value;
+            let _config = useCompositionConfig(e).value;
             return composer(_config)
         })
     }
