@@ -1,6 +1,6 @@
 <template>
     <div class="toolbar">
-        <button>撤消</button>
+        <button>撤发消</button>
         <div class="canvas-config">
             <span>画布大小</span>
             <input v-model="canvasStyleData.width" />
