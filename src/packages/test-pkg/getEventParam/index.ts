@@ -1,19 +1,22 @@
 import defineCompositionMaker from "../../../lib/utils/defineCompositionMaker";
 
 export default defineCompositionMaker({
-    name: "const-b",
-    label: "整型常量",
+    name: "get-event-param",
+    label: "获取事件参数",
     args: () => {
         return {}
     },
     result: () => {
         return {
             type: "number",
-            label: "返回一个整型值",
+            label: "返回事件参数",
             tips: "提示"
         }
     },
-    body: () => {
-        return () => 20
+    body: (config) => {
+        return () => {
+            debugger;
+            return config.data?.payload
+        }
     }
 })

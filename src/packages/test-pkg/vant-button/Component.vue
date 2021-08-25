@@ -1,5 +1,5 @@
 <template>
-    <VantButton :text="text" @click="emits('click')"></VantButton>
+    <VantButton :text="text" @click="emits('click', text)"></VantButton>
 </template>
 <script lang="ts" setup>
 import { defineProps, toRefs } from 'vue';

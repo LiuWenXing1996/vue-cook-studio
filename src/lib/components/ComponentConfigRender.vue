@@ -18,6 +18,7 @@
             v-bind="config?.attrs?.props"
             :class="[config?.attrs?.class]"
             :style="config?.attrs?.style"
+            v-on="events"
         >
             <template v-for="(slot,name) in config?.attrs?.slots" v-slot:[name]>
                 <template v-if="slot.length > 0">
@@ -51,6 +52,7 @@ import useComponentSelected from "../hooks/useComponentSelected";
 import type IComponentConfig from "../types/IComponentConfig";
 import getComponentConfigDefault from "../utils/getComponentConfigDefault";
 import emptySlotMaker from "../maker/empty-slot"
+import composer from "../utils/composer";
 
 const props = defineProps(
     {
@@ -96,6 +98,25 @@ const componentDragged = useComponentDragged()
 const componentHovered = useComponentHovered()
 const selected = computed(() => componentSelected.value?.uid === config.value.uid) // WHY为什么必须要用UID来判断，直接判断对象相等不可以呢？
 const hovered = computed(() => componentHovered.value?.uid === config.value.uid)
+const events = computed(() => {
+    if (config.value?.attrs?.emits) {
+        const emits = config.value?.attrs?.emits
+        let keys = Object.keys(emits);
+        let emitFunctions: Record<string, Function> = {}
+        keys.forEach(key => {
+            emitFunctions[key] = (payload: any) => {
+                let compositionConfigs = emits[key];
+                compositionConfigs.map((cc) => {
+                    cc.data = cc.data || {};
+                    cc.data.payload = payload
+                    composer(cc)
+                })
+            }
+        })
+        return emitFunctions
+    }
+    return {}
+})
 
 const handleClick = (event: MouseEvent) => {
     if (!isEdit.value) {

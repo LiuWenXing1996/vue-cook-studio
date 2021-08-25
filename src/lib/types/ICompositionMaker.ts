@@ -1,4 +1,4 @@
-import { ComponentPropsOptions, Prop } from "vue";
+import ICompositionConfig from './ICompositionConfig';
 
 interface ICompositionParam {
     tips?: string,
@@ -9,7 +9,7 @@ interface ICompositionParam {
 export default interface ICompositionMaker {
     name: string,
     label: string,
-    args: Record<string, ICompositionParam>,
-    result: ICompositionParam,
-    body: Function
+    args: (config: ICompositionConfig) => Record<string, ICompositionParam>,
+    result: (config: ICompositionConfig) => ICompositionParam,
+    body: (config: ICompositionConfig) => Function
 }

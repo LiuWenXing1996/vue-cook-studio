@@ -1,5 +1,5 @@
 <template>
-    <div style="position: fixed;left: 10px;bottom: 10px;">
+    <div style="position: fixed;left: 10px;bottom: 10px;display: flex;">
         <button @click="run" style="position: absolute;left: 10px;bottom: 10px;z-index: 1;">运行</button>
         <div style="width: 100px;">
             <CompositionMaker v-for="maker in compositionMakerList" :maker="maker">
@@ -21,6 +21,7 @@ import composer from '../utils/composer';
 import CompositionMaker from './CompositionMaker.vue';
 import getCompositionConfigDefault from '../utils/getCompositionConfigDefault';
 import type ICompositionConfig from '../types/ICompositionConfig';
+import useCompositionConfig from '../hooks/useComponsitionConfig';
 
 const props = defineProps(
     {
@@ -30,13 +31,18 @@ const props = defineProps(
     }
 )
 const { config } = toRefs(props)
-const configChageable = ref(config?.value)
+const finalyConfigId = ref(config?.value?.uid)
 let graph: Graph;
 const compositionMakerList = useCompositionMakerList()
+const data = useData()
 
 const run = () => {
-    const ss = composer(configChageable.value)
-    alert(ss)
+    if (finalyConfigId.value) {
+        let config = useCompositionConfig(finalyConfigId.value)
+        const ss = composer(config.value)
+        alert(ss)
+    }
+
 }
 
 const handleDragOver = (e: DragEvent) => {
@@ -58,8 +64,8 @@ const handleDrop = (e: DragEvent) => {
         return;
     }
     const config = getCompositionConfigDefault(maker.value);
-    if (!configChageable.value) {
-        configChageable.value = config
+    if (!finalyConfigId.value) {
+        finalyConfigId.value = config.uid
     }
     const node = configToNode(config)
     if (node) {
@@ -140,6 +146,7 @@ const configToNode = (config: ICompositionConfig): Node | undefined => {
                 selector: 'portBody',
             },
         ],
+        data: config
     }
 }
 
@@ -163,7 +170,21 @@ onMounted(() => {
             visible: true, // 渲染网格背景
         },
     });
-    // TODO:监听节点和边的新增。。
+    graph.on('node:added', ({ node, index, options }) => {
+        let config = node.data;
+        data.value.compositions.push(config);
+    })
+    graph.on('edge:connected', ({ isNew, edge }) => {
+        const sourceId = edge.getSourceCellId()
+        const targetId = edge.getTargetCellId()
+        let config = useCompositionConfig(targetId)
+        if (config.value) {
+            const configValue = config.value;
+            configValue.data = configValue.data || {}
+            configValue.data.args = configValue.data.args || []
+            configValue.data.args.push(sourceId)
+        }
+    })
 })
 
 

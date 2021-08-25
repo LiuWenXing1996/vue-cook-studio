@@ -19,6 +19,9 @@
         </div>
     </div>
     <LogicComposer></LogicComposer>
+    <div style="position: fixed;right: 10px;bottom: 10px;width: 100px;height: 100px;">
+        <ComponentConfigRender :config="componentConfig"></ComponentConfigRender>
+    </div>
 </template>
 <script setup lang="ts">
 import OperateMenu from "./OperateMenu.vue"

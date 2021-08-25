@@ -13,6 +13,11 @@ const router = createRouter({
             name: 'Vsc',
             component: () => import('../views/Vsc.vue'),
         },
+        {
+            path: '/win',
+            name: 'Win',
+            component: () => import('../views/Win.vue'),
+        },
     ]
 })
 

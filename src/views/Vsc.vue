@@ -5,13 +5,14 @@
 import { ref } from "vue";
 import { OperatePanel, getComponentConfigDefault, useComponentMakerList, addMenuItem, useInspectList } from "../lib"
 import useCompositionMakerList from "../lib/hooks/useCompositionMakerList";
-import { RootAppMaker, VantButtonMaker, InputInspector, AddMaker,ConstAMaker,ConstBMaker } from "../packages/test-pkg"
+import { RootAppMaker, VantButtonMaker, InputInspector, AddMaker, ConstAMaker, ConstBMaker, GetEventParamMaker } from "../packages/test-pkg"
 
 const makerList = useComponentMakerList()
 const compositionMakerList = useCompositionMakerList()
 compositionMakerList.value.push(AddMaker)
 compositionMakerList.value.push(ConstAMaker)
 compositionMakerList.value.push(ConstBMaker)
+compositionMakerList.value.push(GetEventParamMaker)
 makerList.value.push(RootAppMaker, VantButtonMaker)
 const rootAppConfig = ref(getComponentConfigDefault(RootAppMaker))
 const inspectorList = useInspectList()

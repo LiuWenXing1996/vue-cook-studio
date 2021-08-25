@@ -1,4 +1,6 @@
 export { default as OperatePanel } from "./components/OperatePanel.vue"
+export { default as WindowRender } from "./components/WindowRender.vue"
+export { default as Layout } from "./components/Layout.vue"
 export { default as defineComponentMaker } from "./utils/defineComponentMaker"
 export { default as defineEditorMaker } from "./utils/defineEditorMaker"
 export { default as useComponentMaker } from "./hooks/useComponentMaker"

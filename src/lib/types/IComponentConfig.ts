@@ -1,4 +1,5 @@
 import { CSSProperties } from "vue";
+import ICompositionConfig from './ICompositionConfig';
 
 export default interface IComponentConfig {
     uid: string,
@@ -13,7 +14,7 @@ export default interface IComponentConfig {
         class?: string[],
         props?: Record<string, any>,
         slots?: Record<string, IComponentConfig[]>,
-        emits?: Record<string, string>,
+        emits?: Record<string, ICompositionConfig[]>,
     }
 }
 

@@ -49,13 +49,18 @@
         <n-descriptions-item label="插槽">
             <n-data-table :columns="cmptSlotsColumns" :data="cmptSlotsData" :single-line="false" />
         </n-descriptions-item>
-        <n-descriptions-item label="事件"></n-descriptions-item>
+        <n-descriptions-item label="事件">
+            <button @click="createListener">创建</button>
+            <n-data-table :columns="cmptEmitsColumns" :data="cmptEmitsData" :single-line="false" />
+        </n-descriptions-item>
     </n-descriptions>
 </template>
 <script setup lang="ts">
 import type IComponentConfig from "../../types/IComponentConfig";
 import { computed, h, ref, toRefs, watch } from "vue"
 import { NButton, NDataTable, NDynamicInput, NSelect, NCollapse, NCollapseItem, NDescriptions, NDescriptionsItem } from "naive-ui"
+import useCompositionMaker from "../../hooks/useCompositionMaker";
+import getCompositionConfigDefault from "../../utils/getCompositionConfigDefault";
 
 const props = defineProps({
     componentConfig: {
@@ -142,6 +147,47 @@ const cmptSlotsData = computed(() => {
     })
     return slotList
 })
+const cmptEmitsColumns = computed(() => {
+    return [
+        {
+            title: '事件名称',
+            key: 'name',
+            rowSpan: (rowdata: any) => rowdata.count,
+            colSpan: () => 1
+        },
+        {
+            title: '组合uid',
+            key: 'cmpnUid'
+        }
+    ]
+})
+const cmptEmitsData = computed(() => {
+    const emits = componentConfig.value?.attrs?.emits || {};
+    const emitList = Object.entries(emits).flatMap(e => {
+        const value = e[1];
+        return value.map(v => {
+            return {
+                key: e[0],
+                name: e[0],
+                count: e[1].length,
+                cmpnUid: v.uid
+            }
+        })
+    })
+    return emitList
+})
+
+const createListener = () => {
+    const maker = useCompositionMaker("get-event-param");
+    if (maker.value) {
+        const config = getCompositionConfigDefault(maker.value)
+        const componentConfigValue = componentConfig.value
+        componentConfigValue.attrs = componentConfigValue.attrs || {}
+        componentConfigValue.attrs.emits = componentConfigValue.attrs.emits || {}
+        componentConfigValue.attrs.emits.click = componentConfigValue.attrs.emits.click || []
+        componentConfigValue.attrs.emits.click.push(config);
+    }
+}
 
 </script>
 <style lang="less">
