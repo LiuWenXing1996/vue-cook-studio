@@ -1,34 +1,19 @@
 // TODO：多窗口布局实现
 <template>
     <div style="width: 100%;height: 100%;">
-        <window-split :win-config="winConfig"></window-split>
+        <split-window :config="config"></split-window>
     </div>
 </template>
 <script setup lang="ts">
 import { ref } from "vue"
 import type IWindowConfig from "../types/IWindowConfig";
 import WindowSplit from "./WindowSplit.vue";
-const winConfig = ref<IWindowConfig>({
+import SplitWindow from "./SplitWindow.vue"
+import type ISplitWindowConfig from "../types/ISplitWindowConfig";
+const config = ref<ISplitWindowConfig>({
     width: 100,
     height: 100,
-    title: "dddd0",
-    childern: [
-        {
-            width: 100 / 3,
-            height: 100,
-            title: "dddd0",
-        },
-        {
-            width: 100 / 3,
-            height: 100,
-            title: "dddd0",
-        },
-        {
-            width: 100 / 3,
-            height: 100,
-            title: "dddd0",
-        },
-    ]
+    innerWindows: []
 })
 
 </script>

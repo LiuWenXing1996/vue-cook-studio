@@ -10,9 +10,7 @@
 </template>
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, toRefs } from "vue";
-import type ISplitWindowConfig from "../types/ISplitWindowConfig";
 import type IWindowConfig from "../types/IWindowConfig";
-import type { exposeType } from "./SplitWindow.vue"
 
 const props = defineProps(
     {
@@ -20,25 +18,25 @@ const props = defineProps(
             type: Boolean,
             required: true
         },
-        firstConfig: {
-            type: Object as () => ISplitWindowConfig,
+        firstIndex: {
+            type: Number,
             required: true
         },
-        firstRef: {
-            type: Object as () => exposeType | null,
+        secondIndex: {
+            type: Number,
             required: true
         },
-        secondConfig: {
-            type: Object as () => ISplitWindowConfig,
+        divs: {
+            type: Object as () => (any | null)[],
             required: true
         },
-        secondRef: {
-            type: Object as () => exposeType | null,
+        winConfig: {
+            type: Object as () => IWindowConfig,
             required: true
-        },
+        }
     }
 )
-const { isV, firstConfig, firstRef, secondConfig, secondRef } = toRefs(props)
+const { firstIndex, secondIndex, isV, divs, winConfig } = toRefs(props)
 
 const isActived = ref(false)
 const isMove = ref(false)
@@ -58,27 +56,35 @@ const handleMousedown = () => {
 const handleMouseMove = (e: MouseEvent) => {
     if (isMove.value) {
         if (isV.value) {
-            const firstHeight = firstRef.value?.el.clientHeight
-            const secondHeight = secondRef.value?.el.clientHeight
+            const firstHeight = divs.value?.[firstIndex.value]?.el?.clientHeight
+            const secondHeight = divs.value?.[secondIndex.value]?.el?.clientHeight
             const totalHeight = Number(firstHeight) + Number(secondHeight)
             if (totalHeight) {
-                const targetFirstH = firstConfig.value.height + (e.movementY / totalHeight * 100)
-                const targetSecondH = secondConfig.value.height - (e.movementY / totalHeight * 100)
-                if (targetFirstH >= 10 && targetSecondH >= 10) {
-                    firstConfig.value.height = targetFirstH
-                    secondConfig.value.height = targetSecondH
+                const first = winConfig.value?.childern?.[firstIndex.value]
+                const second = winConfig.value?.childern?.[secondIndex.value]
+                if (first && second) {
+                    const targetFirstH = first.height + (e.movementY / totalHeight * 100)
+                    const targetSecondH = second.height - (e.movementY / totalHeight * 100)
+                    if (targetFirstH >= 10 && targetSecondH >= 10) {
+                        first.height = targetFirstH
+                        second.height = targetSecondH
+                    }
                 }
             }
         } else {
-            const firstWidth = firstRef.value?.el.clientWidth
-            const secondWidth = secondRef.value?.el.clientWidth
+            const firstWidth = divs.value?.[firstIndex.value]?.el?.clientWidth
+            const secondWidth = divs.value?.[secondIndex.value]?.el?.clientWidth
             const totalWidth = Number(firstWidth) + Number(secondWidth)
             if (totalWidth) {
-                const targetFirstW = firstConfig.value.width + (e.movementX / totalWidth * 100)
-                const targetSecondW = secondConfig.value.width - (e.movementX / totalWidth * 100)
-                if (targetFirstW >= 10 && targetSecondW >= 10) {
-                    firstConfig.value.width = targetFirstW
-                    secondConfig.value.width = targetSecondW
+                const first = winConfig.value?.childern?.[firstIndex.value]
+                const second = winConfig.value?.childern?.[secondIndex.value]
+                if (first && second) {
+                    const targetFirstW = first.width + (e.movementX / totalWidth * 100)
+                    const targetSecondW = second.width - (e.movementX / totalWidth * 100)
+                    if (targetFirstW >= 10 && targetSecondW >= 10) {
+                        first.width = targetFirstW
+                        second.width = targetSecondW
+                    }
                 }
             }
         }

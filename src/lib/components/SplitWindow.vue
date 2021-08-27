@@ -1,15 +1,25 @@
-// TODO:window 渲染器
 <template>
-    <div
-        ref="el"
-        class="window-split"
-        :style="{ width: toPercent(winConfig.width), height: toPercent(winConfig.height) }"
-    >
-        <template v-if="!hasChildren">
+    <div class="split-window" ref="el">
+        <template v-if="config.splitConfig">
+            <split-window :config="config.splitConfig.first" ref="firstRef" :parent-config="config"></split-window>
+            <split-divider
+                :firstConfig="config.splitConfig.first"
+                :firstRef="firstRef"
+                :secondConfig="config.splitConfig.second"
+                :secondRef="secondRef"
+                :is-v="isV"
+            ></split-divider>
+            <split-window
+                :config="config.splitConfig.second"
+                ref="secondRef"
+                :parent-config="config"
+            ></split-window>
+        </template>
+        <template v-else>
             <div class="header">
                 <div class="title">
                     <div
-                        v-for="innerWin in winConfig.innerWins"
+                        v-for="innerWin in config.innerWindows"
                         class="inner-title"
                         @click="showInnerWin(innerWin)"
                     >
@@ -26,89 +36,106 @@
                     <n-icon size="20" title="水平分割" class="icon" @click="splitH">
                         <SplitVertical32Regular />
                     </n-icon>
-                    <n-icon size="20" title="关闭所有" class="icon" @click="closeAll">
+                    <n-icon
+                        size="20"
+                        title="关闭所有"
+                        class="icon"
+                        @click="closeAll"
+                        v-if="parentConfig"
+                    >
                         <CloseOutline></CloseOutline>
                     </n-icon>
                 </div>
             </div>
-            <div class="content">
-                {{ showingInnerWin?.content }}
-                <!-- <component :is="window.component"></component> -->
-            </div>
-        </template>
-        <template v-else>
-            <template v-for="(_config,_index) in winConfig.childern">
-                <window-split :win-config="_config" :ref="el => { if (el) divs[_index] = el }"></window-split>
-                <SplitDivider
-                    :is-v="isV"
-                    :first-index="_index"
-                    :second-index="_index + 1"
-                    :divs="divs"
-                    :win-config="winConfig"
-                    v-if="_index < childrenLength - 1"
-                ></SplitDivider>
-            </template>
+            <div class="content">{{ showingInnerWin?.content }}</div>
         </template>
     </div>
 </template>
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, toRefs, onBeforeUpdate, watchPostEffect, defineExpose } from "vue";
 import type { Ref, VNode } from "vue";
-import { NIcon } from "naive-ui"
 import SplitDivider from "./SplitDivider.vue"
+import { NIcon } from "naive-ui"
 import { SplitHorizontal32Regular, SplitVertical32Regular } from "@vicons/fluent"
 import { CloseOutline } from "@vicons/ionicons5"
+import type ISplitWindowConfig from "../types/ISplitWindowConfig";
 import type IWindowConfig from "../types/IWindowConfig";
+import { v4 as uuidv4 } from "uuid"
 
 const props = defineProps(
     {
-        winConfig: {
-            type: Object as () => IWindowConfig,
+        config: {
+            type: Object as () => ISplitWindowConfig,
             required: true
+        },
+        parentConfig: {
+            type: Object as () => ISplitWindowConfig
         }
     }
 )
+const { config, parentConfig } = toRefs(props)
+const firstRef = ref(null)
+const secondRef = ref(null)
 const el = ref(null)
-const divs = ref<any>([])
-
+export interface exposeType {
+    el: HTMLDivElement
+}
 defineExpose({
     el: el
 })
-
 const splitH = () => {
-    winConfig.value.childern = [
-        {
+    config.value.splitConfig = {
+        first: {
             width: 100 / 2,
             height: 100,
-            title: "dddd0",
+            innerWindows: [{
+                title: `t-${uuidv4()}`,
+                content: `c-${uuidv4()}`
+            }]
         },
-        {
+        second: {
             width: 100 / 2,
             height: 100,
-            title: "dddd0",
-        },
-    ]
+            innerWindows: [{
+                title: `t-${uuidv4()}`,
+                content: `c-${uuidv4()}`
+            }]
+        }
+    }
 }
 const splitV = () => {
-    winConfig.value.childern = [
-        {
+    config.value.splitConfig = {
+        first: {
             width: 100,
             height: 100 / 2,
-            title: "dddd0",
+            innerWindows: [{
+                title: `t-${uuidv4()}`,
+                content: `c-${uuidv4()}`
+            }]
         },
-        {
+        second: {
             width: 100,
             height: 100 / 2,
-            title: "dddd0",
+            innerWindows: [{
+                title: `t-${uuidv4()}`,
+                content: `c-${uuidv4()}`
+            }]
         }
-    ]
+    }
 }
 const closeAll = () => {
-
+    if (parentConfig?.value?.splitConfig) {
+        if (parentConfig?.value?.splitConfig?.first === config.value) {
+            parentConfig.value.innerWindows = parentConfig.value.splitConfig.second.innerWindows
+            parentConfig.value.splitConfig = parentConfig.value.splitConfig.second.splitConfig
+        } else {
+            parentConfig.value.innerWindows = parentConfig.value.splitConfig.first.innerWindows
+            parentConfig.value.splitConfig = parentConfig.value.splitConfig.first.splitConfig
+        }
+    }
 }
-
 const closeInnerWin = (innerWin: IWindowConfig) => {
-    winConfig.value.innerWins = winConfig.value.innerWins.filter(e => e === innerWin)
+    config.value.innerWindows = config.value.innerWindows.filter(e => e === innerWin)
 }
 
 const showingInnerWin = ref<IWindowConfig>()
@@ -116,51 +143,27 @@ const showInnerWin = (innerWin: IWindowConfig) => {
     showingInnerWin.value = innerWin
 }
 
-// 确保在每次更新之前重置ref
-// onBeforeUpdate(() => {
-//     divs.value = []
-// })
-// TODO:在divider中传入所有的children和children ref div
-// 参考vue官方例子：https://v3.cn.vuejs.org/guide/composition-api-template-refs.html#v-for-%E4%B8%AD%E7%9A%84%E7%94%A8%E6%B3%95
-onMounted(() => {
-    // console.log(divs.value)
-})
-const parent = ref(null)
-const getChild = (index: number) => {
-    return winConfig.value?.childern?.[index] as IWindowConfig
-}
-
 const toPercent = (n: number) => `${n}%`
-const { winConfig } = toRefs(props)
+
 const isV = computed(() => {
-    if (hasChildren.value) {
-        if (winConfig.value?.childern?.[0].height === 100) {
-            return false
-        }
+    if (config.value?.splitConfig?.first.height === 100) {
+        return false
     }
     return true
 })
 const flexDirection = computed(() => {
     return isV.value ? "column" : "row"
 })
-const childrenLength = computed(() => {
-    return winConfig.value?.childern?.length || 0
-})
-const hasChildren = computed(() => {
-    if (!winConfig.value.childern) {
-        return false
-    }
-    if (winConfig.value.childern.length <= 0) {
-        return false
-    }
-    return true
-})
+const width = computed(() => toPercent(config.value.width))
+const height = computed(() => toPercent(config.value.height))
 
 
 </script>
 <style lang="less" scoped>
-.window-split {
+.split-window {
     display: flex;
+    width: v-bind(width);
+    height: v-bind(height);
     flex-direction: v-bind(flexDirection);
     .header {
         width: 100%;
